@@ -1,0 +1,43 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch PurePursuit",
+            "request": "launch",
+            "mainClass": "org.chis.sim.userclasses.pathplanning.PurePursuit",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "org.chis.sim.test",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SplineMatrices",
+            "request": "launch",
+            "mainClass": "org.chis.sim.userclasses.pathplanning.SplineMatrices",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GraphicInput",
+            "request": "launch",
+            "mainClass": "org.chis.sim.GraphicInput",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "org.chis.sim.Main",
+            "projectName": "joysim2"
+        }
+    ]
+}
