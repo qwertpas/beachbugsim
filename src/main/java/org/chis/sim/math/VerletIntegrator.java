@@ -18,14 +18,14 @@ public class VerletIntegrator {
     }
 
     public void update(double acc, double dt){
-        // double pos_next = pos + (pos - pos_prev)*(dt / dt_prev) + acc * dt * dt;
-        // vel = (pos_next - pos_prev) / (dt + dt_prev);
+        double pos_next = pos + (pos - pos_prev)*(dt / dt_prev) + acc * dt * dt;
+        vel = (pos_next - pos_prev) / (dt + dt_prev);
         
-        // pos_prev = pos;
-        // pos = pos_next;
-        // dt_prev = dt;
+        pos_prev = pos;
+        pos = pos_next;
+        dt_prev = dt;
 
-        vel += acc * dt;
-        pos += vel * dt;
+        // vel += acc * dt;
+        // pos += vel * dt;
     }
 }

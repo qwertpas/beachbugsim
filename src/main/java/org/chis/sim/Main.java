@@ -19,7 +19,6 @@ public class Main {
 
         GraphicSim.init();
         Controls.init();
-        Constants.calcConstants();
 
         new GraphicInput().setVisible(true);
 
@@ -30,12 +29,12 @@ public class Main {
 
             if(!paused){
                 elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9;
-                robot.update(0.05);
+                robot.update(Constants.DT.getDouble());
                 GraphicSim.sim.repaint();                
             }
 
             try {
-                Thread.sleep(5);
+                Thread.sleep((int)(Constants.DT.getDouble() * 1000 / Constants.SIMSPEED.getDouble()));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

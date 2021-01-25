@@ -62,17 +62,6 @@ public class Robot{
     VerletIntegrator angIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
 
     public void init(){
-
-        
-        // leftGearbox.setPower(0);
-        // rightGearbox.setPower(0);
-
-        // for(Motor motor : leftGearbox.motors){
-        //     motor.resetEncoder();
-        // }
-        // for(Motor motor : rightGearbox.motors){
-        //     motor.resetEncoder();
-        // }
     }
 
     public void update(double dt){
@@ -80,24 +69,28 @@ public class Robot{
         netForce = new Vector2D();
         netTorque = 0;
         for(Wheel wheel : wheels){
-            wheel.update(robotVel, dt);
+            Pose2D robotVel_robot = new Pose2D(robotVel.getVector2D().rotate(-robotPos.ang), robotVel.ang);
+            wheel.update(robotVel_robot, dt);
             netForce = netForce.add(wheel.force);
             netTorque = netTorque + wheel.force.pcross(wheel.placement.getVector2D());
         }
+        netForce = netForce.rotate(robotPos.ang);
 
         //wheels scrub, applying a frictional torque that slows turning
-        netTorque = Util.applyFrictions(
-            netTorque, 
-            robotVel.ang, 
-            Constants.SCRUB_STATIC, 
-            Constants.SCRUB_KINE, 
-            0, 
-            Constants.ANGVELO_THRESHOLD.getDouble())
-        ;
+        // netTorque = Util.applyFrictions(
+        //     netTorque, 
+        //     robotVel.ang, 
+        //     Constants.SCRUB_STATIC, 
+        //     Constants.SCRUB_KINE, 
+        //     0, 
+        //     Constants.ANGVELO_THRESHOLD.getDouble())
+        // ;
 
         //Newton's 2nd Law to find accelerations given forces and torques
         robotAcc.setVector2D(netForce.scalarDiv(Constants.ROBOT_MASS.getDouble()));
-        robotAcc.ang = netTorque / Constants.ROBOT_ROT_INERTIA;
+
+        double ROBOT_ROT_INERTIA = Constants.ROBOT_MASS.getDouble() * Constants.ROBOT_WIDTH.getDouble() * Constants.ROBOT_WIDTH.getDouble() / 6.0;
+        robotAcc.ang = netTorque / ROBOT_ROT_INERTIA;
 
         xIntegrator.update(robotAcc.x, dt);
         yIntegrator.update(robotAcc.y, dt);

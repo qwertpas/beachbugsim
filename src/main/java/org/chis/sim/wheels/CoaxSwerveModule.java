@@ -70,19 +70,19 @@ public class CoaxSwerveModule extends Wheel {
         double driveTorque = Util.applyFrictions(
             driveMotor.torque * ROLL_GR,
             wheelRollVelo, 
-            1,
-            1,
+            2,
+            1.8,
             0,
-            0.01
+            0.001
         );
         double driveForce = driveTorque / wheelRadius;
-        
+
         double scrubForce = Util.applyFrictions(
             0,
             wheelTranslation.y,
-            100,
-            90,
-            1,
+            200,
+            190,
+            0,
             0.01
         );
 
@@ -93,38 +93,4 @@ public class CoaxSwerveModule extends Wheel {
         ;
     }
 
-    public static void main(String[] args) {
-
-
-        CoaxSwerveModule module = new CoaxSwerveModule(
-            new Pose2D(1, 1, 0), 
-            0.0508, 
-            new Motor(MotorType.FALCON, 1), 
-            new Motor(MotorType.FALCON, 1), 
-            0.0002225802, 
-            12.8, 
-            6.86
-        );
-
-        // module.driveMotor.setPower(1);
-        module.turnMotor.setPower(1);
-
-        module.update(new Pose2D(0, 0, 0), 0.05);
-        System.out.println(module.wheelTurnIntegrator.pos);
-
-        module.update(new Pose2D(0, 0, 0), 0.05);
-        System.out.println(module.wheelTurnIntegrator.pos);
-
-        module.update(new Pose2D(0, 0, 0), 0.05);
-        System.out.println(module.wheelTurnIntegrator.pos);
-
-        module.update(new Pose2D(0, 0, 0), 0.05);
-        System.out.println(module.wheelTurnIntegrator.pos);
-
-
-        System.out.println(module.force);
-
-
-    }
-    
 }

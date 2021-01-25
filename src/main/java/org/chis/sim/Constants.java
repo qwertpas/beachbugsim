@@ -44,7 +44,7 @@ public class Constants{
      * //////////////////////////////// */  
     public static Constant CONTROLLER_INDEX = new Constant("Controller_INDEX", 0, Type.INT); //which joystick?
     public static Constant DISPLAY_SCALE = new Constant("DISPLAY_SCALE", 75, Type.DOUBLE); //in pixels per meter
-    public static Constant DT = new Constant("DT", 0.02, Type.DOUBLE); //in seconds per update
+    public static Constant DT = new Constant("DT", 0.001, Type.DOUBLE); //in seconds per update
     public static Constant SIMSPEED = new Constant("SIMSPEED", 1, Type.DOUBLE); //simulator speed (1 being normal, 2 being fast)
 
 
@@ -67,6 +67,7 @@ public class Constants{
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
      * //////////////////////////////// */  
     public static Constant[] constants = {
+        DT,
         TURN_ERROR,
         STATIC_FRIC_COEFF,
         KINE_FRIC_COEFF,
@@ -75,26 +76,6 @@ public class Constants{
         GEAR_VISCOUS_FRIC,
         DISPLAY_SCALE,
     };
-
-
-    
-    /** ////////////////////////////////
-     * CALCULATED FROM OTHERS
-     * //////////////////////////////// */     
-    public static double
-        HALF_DIST_BETWEEN_WHEELS,
-        SCRUB_STATIC,
-        SCRUB_KINE,
-        ROBOT_ROT_INERTIA
-    ;
-
-    public static void calcConstants(){
-        HALF_DIST_BETWEEN_WHEELS = 0.5 * DIST_BETWEEN_WHEELS.getDouble();
-        SCRUB_STATIC = SCRUB_COEFF.getDouble() * ROBOT_MASS.getDouble() * GRAV_ACCEL.getDouble() * STATIC_FRIC_COEFF.getDouble() * HALF_DIST_BETWEEN_WHEELS * Math.sqrt(2);
-        SCRUB_KINE = SCRUB_COEFF.getDouble() * ROBOT_MASS.getDouble() * GRAV_ACCEL.getDouble() * KINE_FRIC_COEFF.getDouble() * HALF_DIST_BETWEEN_WHEELS * Math.sqrt(2);
-        ROBOT_ROT_INERTIA = (1.0/6.0) * ROBOT_MASS.getDouble() * ROBOT_WIDTH.getDouble() * ROBOT_WIDTH.getDouble();
-    }
-
 
     enum Type{
         BOOLEAN, INT, DOUBLE, STRING;
