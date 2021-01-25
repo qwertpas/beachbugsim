@@ -48,11 +48,20 @@ public class Util {
     return Double.parseDouble(new DecimalFormat("#.##").format(input));
   }
 
-  public static double posModulo(double input, double modulo) { // modulo but it always returns a positive number, ideal for screen loopback
+  // modulo but it always returns a positive number, ideal for screen loopback
+  public static double posModulo(double input, double modulo) { 
     while (input >= modulo)
       input -= modulo;
     while (input < 0)
       input += modulo;
+    return input;
+  }
+
+  // modulo for screen loopback but assumes zero at the center of the screen
+  public static double centerModulo(double input, double max) { 
+    input += max;
+    input = posModulo(input, 2 * max);
+    input -= max;
     return input;
   }
 
@@ -138,30 +147,6 @@ public class Util {
         velo = velo_input;
         dist = dist_input;
       }
-    }
-
-    public static void main(String[] args) {
-      double scale = 10;
-
-      MotionProfile testProfile = new MotionProfile(3 * scale, 1 * scale, -1 * scale, 15 * scale);
-
-      // MotionProfile testProfile = new MotionProfile(Util.metersToInches(3), //max
-      // velocity
-      // Util.metersToInches(1), //max acceleration
-      // Util.metersToInches(-1), //min acceleration
-      // Util.metersToInches(15) ); //target distance
-
-      System.out.println("is trapezoid: " + testProfile.isTrapezoid);
-      System.out.println("time1: " + testProfile.times[1]);
-      System.out.println("time2: " + testProfile.times[2]);
-      if (testProfile.isTrapezoid) {
-        System.out.println("time3: " + testProfile.times[3]);
-      }
-      System.out.println("accel: " + testProfile.getPoint(0).accel);
-      System.out.println("velo: " + testProfile.getPoint(0).velo);
-      System.out.println("dist: " + testProfile.getPoint(0).dist);
-
-      System.out.println("calc: " + (3 * 10) / (1 * 10));
     }
 
   }
@@ -372,91 +357,5 @@ public class Util {
     }
   }
 
-  public static class Vector2D {
-    public double x;
-    public double y;
-
-    public enum Type {
-      CARTESIAN, POLAR
-    }
-
-    public Vector2D(double magnitudeOrX, double directionOrY, Type vectorType) {
-      if (vectorType == Type.CARTESIAN) {
-        x = magnitudeOrX;
-        y = directionOrY;
-      } else {
-        x = magnitudeOrX * Math.cos(directionOrY);
-        y = magnitudeOrX * Math.sin(directionOrY);
-      }
-    }
-
-    // unit vector
-    public Vector2D(double direction) {
-      x = Math.cos(direction);
-      y = Math.sin(direction);
-    }
-
-    // zero vector
-    public Vector2D() {
-      x = 0;
-      y = 0;
-    }
-
-    public Vector2D add(Vector2D valueToAdd) {
-      return new Vector2D(this.x + valueToAdd.x, this.y + valueToAdd.y, Type.CARTESIAN);
-    }
-
-    public Vector2D subtract(Vector2D valueToSubtract) {
-      return new Vector2D(this.x - valueToSubtract.x, this.y - valueToSubtract.y, Type.CARTESIAN);
-    }
-
-    public double dotProduct(Vector2D f) {
-      return this.x * f.x + this.y * f.y;
-    }
-
-    public Vector2D scalarAdd(double scalar) {
-      return new Vector2D(this.x + scalar, this.y + scalar, Type.CARTESIAN);
-    }
-
-    public Vector2D scalarMult(double scalar) {
-      return new Vector2D(this.x * scalar, this.y * scalar, Type.CARTESIAN);
-    }
-
-    public Vector2D scalarDiv(double scalar) {
-      return new Vector2D(this.x / (double) scalar, this.y / (double) scalar, Type.CARTESIAN);
-    }
-
-    public Vector2D rotate(double radiansToRotate) {
-      double sin = Math.sin(radiansToRotate);
-      double cos = Math.cos(radiansToRotate);
-      return new Vector2D(this.x * cos - this.y * sin, this.x * sin + this.y * cos, Type.CARTESIAN);
-    }
-
-    public double getMagnitude() {
-      return Math.sqrt(x * x + y * y);
-    }
-
-    public double dist(Vector2D otherVec){
-      return this.subtract(otherVec).getMagnitude();
-    }
-
-    public double getAngle() {
-      return Math.atan2(y, x);
-    }
-
-    public boolean equals(Vector2D comparison){
-      double epsilon = 1e-10; //close enough to 10 decimal places
-      return Math.abs(this.x - comparison.x) < epsilon && Math.abs(this.y - comparison.y) < epsilon;
-    }
-
-    public boolean equals(Vector2D comparison, double epsilon){
-      return Math.abs(this.x - comparison.x) < epsilon && Math.abs(this.y - comparison.y) < epsilon;
-    }
-
-    public String toString() {
-      return "(" + Util.roundHundreths(x) + ", " + Util.roundHundreths(y) + ")";
-    }
-
-  }
 
 }

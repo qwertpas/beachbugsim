@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.chis.sim.Serie.Point;
-import org.chis.sim.Util.Vector2D;
+import org.chis.sim.math.*;
 
 public class GraphicDash extends JPanel{
 

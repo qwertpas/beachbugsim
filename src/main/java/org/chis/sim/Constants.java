@@ -11,15 +11,13 @@ public class Constants{
      * REAL PHYSICAL CONSTANTS (meters, kilograms, seconds, Newtons, radians)
      * //////////////////////////////////////////// */ 
     public static Constant MAX_VOLTAGE = new Constant("MAX_VOLTAGE", 12, Type.DOUBLE);
-    public static Constant GEAR_RATIO = new Constant("GEAR_RATIO", 10, Type.DOUBLE);
-    public static Constant STALL_TORQUE = new Constant("STALL_TORQUE", 2.7, Type.DOUBLE); //NEO: https://www.revrobotics.com/content/docs/REV-21-1650-DS.pdf
-    public static Constant FREE_SPEED = new Constant("FREE_SPEED", 594, Type.DOUBLE); //NEO
-    public static Constant TICKS_PER_REV = new Constant("TICKS_PER_REV", 10.72, Type.DOUBLE); //NEO on KOP drive
 
     public static Constant ROBOT_MASS = new Constant("ROBOT_MASS", 45, Type.DOUBLE); //about 100 lbs
     public static Constant ROBOT_WIDTH = new Constant("ROBOT_WIDTH", Util.inchesToMeters(24), Type.DOUBLE);
     public static Constant DIST_BETWEEN_WHEELS = new Constant("DIST_BETWEEN_WHEELS", Util.inchesToMeters(20), Type.DOUBLE);
     public static Constant WHEEL_RADIUS = new Constant("WHEEL_RADIUS", Util.inchesToMeters(2.5), Type.DOUBLE);
+
+    public static Constant SWERVE_MOI = new Constant("SWERVE_MOI", 0.1, Type.DOUBLE);
 
     //Slows robot rotation
     public static Constant STATIC_FRIC_COEFF = new Constant("STATIC_FRIC_COEFF", 1.1, Type.DOUBLE); //between wheels and ground
@@ -46,6 +44,8 @@ public class Constants{
      * //////////////////////////////// */  
     public static Constant CONTROLLER_INDEX = new Constant("Controller_INDEX", 0, Type.INT); //which joystick?
     public static Constant DISPLAY_SCALE = new Constant("DISPLAY_SCALE", 75, Type.DOUBLE); //in pixels per meter
+    public static Constant DT = new Constant("DT", 0.02, Type.DOUBLE); //in seconds per update
+    public static Constant SIMSPEED = new Constant("SIMSPEED", 1, Type.DOUBLE); //simulator speed (1 being normal, 2 being fast)
 
 
     /** ////////////////////////////////
@@ -68,7 +68,6 @@ public class Constants{
      * //////////////////////////////// */  
     public static Constant[] constants = {
         TURN_ERROR,
-        GEAR_RATIO,
         STATIC_FRIC_COEFF,
         KINE_FRIC_COEFF,
         GEAR_STATIC_FRIC,

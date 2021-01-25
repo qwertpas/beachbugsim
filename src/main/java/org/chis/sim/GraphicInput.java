@@ -98,7 +98,6 @@ public class GraphicInput extends JFrame implements ActionListener {
     public static void resume(){
         Main.paused = false;
         // UserCode.initialize();
-        Main.robot.lastTime = System.nanoTime();
 
         totalTimePaused += System.nanoTime() - lastTimePaused;
 

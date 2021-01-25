@@ -2,8 +2,8 @@ package org.chis.sim.userclasses.paths;
 
 import java.util.ArrayList;
 
-import org.chis.sim.Util.Vector2D;
-import org.chis.sim.Util.Vector2D.Type;
+import org.chis.sim.math.*;
+import org.chis.sim.math.Vector2D.Type;
 
 
 public class PurePursuit {

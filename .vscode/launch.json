@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Robot",
+            "request": "launch",
+            "mainClass": "org.chis.sim.Robot",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "Launch CoaxSwerveModule",
+            "request": "launch",
+            "mainClass": "org.chis.sim.wheels.CoaxSwerveModule",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
+            "name": "Launch Integrator",
+            "request": "launch",
+            "mainClass": "org.chis.sim.math.Integrator",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
             "name": "Launch PurePursuit",
             "request": "launch",
             "mainClass": "org.chis.sim.userclasses.pathplanning.PurePursuit",

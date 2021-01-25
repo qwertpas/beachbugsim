@@ -10,8 +10,6 @@ public class Main {
     public static double startTime;
     public static double elaspedTime;
 
-    public static Motor leftMotor = new Motor();
-    public static Motor rightMotor = new Motor();
     public static Robot robot;
 
     public static void main(String[] args) {
@@ -30,10 +28,10 @@ public class Main {
         startTime = System.nanoTime();
         while (true) {
 
-            while(!paused){
+            if(!paused){
                 elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9;
-                robot.update();
-                GraphicSim.sim.repaint();
+                robot.update(0.05);
+                GraphicSim.sim.repaint();                
             }
 
             try {

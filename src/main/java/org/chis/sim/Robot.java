@@ -1,140 +1,121 @@
 package org.chis.sim;
 
-import org.chis.sim.Util.Vector2D;
+import org.chis.sim.Motor.MotorType;
+import org.chis.sim.math.*;
+import org.chis.sim.wheels.CoaxSwerveModule;
+import org.chis.sim.wheels.Wheel;
 
 //overarching physics simulation
 public class Robot{
 
-    //each gearbox contains 2 motors
-    public Gearbox leftGearbox = new Gearbox(2);
-    public Gearbox rightGearbox = new Gearbox(2);
-
-    //applied by each gearbox
-    public double torqueL, torqueR;
-    public double forceL, forceR;
+    public Wheel[] wheels = {
+        new CoaxSwerveModule(
+            new Pose2D(1, 1, 0), 
+            Constants.WHEEL_RADIUS.getDouble(), 
+            new Motor(MotorType.FALCON, 1), 
+            new Motor(MotorType.FALCON, 1), 
+            Constants.SWERVE_MOI.getDouble(), 
+            12.8, 
+            6.86
+        ),
+        new CoaxSwerveModule(
+            new Pose2D(-1, 1, 0), 
+            Constants.WHEEL_RADIUS.getDouble(), 
+            new Motor(MotorType.FALCON, 1), 
+            new Motor(MotorType.FALCON, 1), 
+            Constants.SWERVE_MOI.getDouble(), 
+            12.8, 
+            6.86
+        ),
+        new CoaxSwerveModule(
+            new Pose2D(-1, -1, 0), 
+            Constants.WHEEL_RADIUS.getDouble(), 
+            new Motor(MotorType.FALCON, 1), 
+            new Motor(MotorType.FALCON, 1), 
+            Constants.SWERVE_MOI.getDouble(), 
+            12.8, 
+            6.86
+        ),
+        new CoaxSwerveModule(
+            new Pose2D(1, -1, 0), 
+            Constants.WHEEL_RADIUS.getDouble(), 
+            new Motor(MotorType.FALCON, 1), 
+            new Motor(MotorType.FALCON, 1), 
+            Constants.SWERVE_MOI.getDouble(), 
+            12.8, 
+            6.86
+        ),
+    };
 
     //dynamics on the whole robot
-    public double forceNet;
-    public double torqueMotors, torqueNet;
+    public Vector2D netForce = new Vector2D();
+    public double netTorque = 0;
 
     //robot state in meters, radians, and seconds
-    public double x, y, heading;
-    public double linVelo, angVelo;
-    public double linAccel, angAccel;
-    public double veloL, veloR;
+    public Pose2D robotPos = new Pose2D();
+    public Pose2D robotVel = new Pose2D();
+    public Pose2D robotAcc = new Pose2D();
 
-    //storing previous velos and accels for midpoint riemann sum integration (trapezoids)
-    double linVeloPrev, angVeloPrev;
-    double linAccelPrev, angAccelPrev;
-
-    //timekeeping for integration
-    double dt;
-    double lastTime;
+    //integrators
+    VerletIntegrator xIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
+    VerletIntegrator yIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
+    VerletIntegrator angIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
 
     public void init(){
-        x = 0; //initial position (meters)
-        y = 0;
-        heading = 0;
-        linVelo = 0;
-        angVelo = 0;
 
-        dt = 0;
-        lastTime = System.nanoTime();
         
-        leftGearbox.setPower(0);
-        rightGearbox.setPower(0);
+        // leftGearbox.setPower(0);
+        // rightGearbox.setPower(0);
 
-        for(Motor motor : leftGearbox.motors){
-            motor.resetEncoder();
-        }
-        for(Motor motor : rightGearbox.motors){
-            motor.resetEncoder();
-        }
+        // for(Motor motor : leftGearbox.motors){
+        //     motor.resetEncoder();
+        // }
+        // for(Motor motor : rightGearbox.motors){
+        //     motor.resetEncoder();
+        // }
     }
 
-    public void update(){
-        //calculate linear velocity of left and right sides given linear and angular velocity
-        veloL = linVelo - Constants.HALF_DIST_BETWEEN_WHEELS * angVelo;
-        veloR = linVelo + Constants.HALF_DIST_BETWEEN_WHEELS * angVelo;
+    public void update(double dt){
 
-        //convert linear velocity to angular velocity the wheels are spinning at, then feed into gearbox to get torque of each
-        torqueL = leftGearbox.getOutputTorque(veloL / Constants.WHEEL_RADIUS.getDouble());
-        torqueR = rightGearbox.getOutputTorque(veloR / Constants.WHEEL_RADIUS.getDouble());
-
-        //convert torque of each gearbox into a force that moves the robot. Add them to get net force.
-        forceL = torqueL / Constants.WHEEL_RADIUS.getDouble();
-        forceR = torqueR / Constants.WHEEL_RADIUS.getDouble();
-        forceNet = forceL + forceR; 
-
-        //calculate the torque that the gearboxes create to spin the robot
-        torqueMotors = (forceR - forceL) * Constants.HALF_DIST_BETWEEN_WHEELS;
+        netForce = new Vector2D();
+        netTorque = 0;
+        for(Wheel wheel : wheels){
+            wheel.update(robotVel, dt);
+            netForce = netForce.add(wheel.force);
+            netTorque = netTorque + wheel.force.pcross(wheel.placement.getVector2D());
+        }
 
         //wheels scrub, applying a frictional torque that slows turning
-        torqueNet = Util.applyFrictions(torqueMotors, angVelo, Constants.SCRUB_STATIC, Constants.SCRUB_KINE, 0, Constants.ANGVELO_THRESHOLD.getDouble());
+        netTorque = Util.applyFrictions(
+            netTorque, 
+            robotVel.ang, 
+            Constants.SCRUB_STATIC, 
+            Constants.SCRUB_KINE, 
+            0, 
+            Constants.ANGVELO_THRESHOLD.getDouble())
+        ;
 
-        //add a constant that simulates hardware error making robot curve
-        torqueNet += Constants.TURN_ERROR.getDouble();
-        
         //Newton's 2nd Law to find accelerations given forces and torques
-        angAccel = torqueNet / Constants.ROBOT_ROT_INERTIA;
-        linAccel = forceNet / Constants.ROBOT_MASS.getDouble();
+        robotAcc.setVector2D(netForce.scalarDiv(Constants.ROBOT_MASS.getDouble()));
+        robotAcc.ang = netTorque / Constants.ROBOT_ROT_INERTIA;
 
-        //get amount of time that passed since the last cycle (dt)
-        dt = (System.nanoTime() - lastTime) * 1e-9; //convert nanoseconds to seconds
-        lastTime = System.nanoTime(); //saving current time for same calculation next cycle
+        xIntegrator.update(robotAcc.x, dt);
+        yIntegrator.update(robotAcc.y, dt);
+        angIntegrator.update(robotAcc.ang, dt);
 
-        //integrating acceleration into velocity, then saving current accels for next cycle
-        linVelo += 0.5 * (linAccel + linAccelPrev) * dt;
-        linAccelPrev = linAccel;
-        angVelo += 0.5 * (angAccel + angAccelPrev) * dt;
-        angAccelPrev = angAccel;
-
-        //integrating velocity into heading and position (in relation to field), then saving velos
-        heading += angVelo * dt;
-        angVeloPrev = angVelo;
-        x += 0.5 * (linVelo + linVeloPrev) * dt * Math.cos(heading);
-        y += 0.5 * (linVelo + linVeloPrev) * dt * Math.sin(heading);
-        linVeloPrev = linVelo;
-    }
-
-    public Vector2D getPos(){
-        return new Vector2D(x, y, Vector2D.Type.CARTESIAN);
+        robotVel = new Pose2D(xIntegrator.vel, yIntegrator.vel, angIntegrator.vel);
+        robotPos = new Pose2D(xIntegrator.pos, yIntegrator.pos, angIntegrator.pos);
     }
 
 
-    //Functions to get encoder data. You can use these in your own drive program in UserCode.java.
-    public double leftEncoderPosition(){
-        double encoderSum = 0;
-        for(Motor motor : leftGearbox.motors){
-            encoderSum += motor.getEncoderPosition();
-        }
-        return Util.roundHundreths(encoderSum / (double)leftGearbox.motors.length);
+    void printDebug(){
+        System.out.println("Pos: " + robotPos);
+        System.out.println("Vel: " + robotVel);
+        System.out.println("Acc: " + robotAcc);
+        System.out.println("netForce: " + netForce);
+        System.out.println("netTorque: " + netTorque);
+        System.out.println("——————————————————");
     }
-
-    public double leftEncoderVelocity(){
-        double encoderSum = 0;
-        for(Motor motor : leftGearbox.motors){
-            encoderSum += motor.getEncoderVelocity();
-        }
-        return Util.roundHundreths(encoderSum / (double)leftGearbox.motors.length);
-    }
-
-    public double rightEncoderPosition(){
-        double encoderSum = 0;
-        for(Motor motor : rightGearbox.motors){
-            encoderSum += motor.getEncoderPosition();
-        }
-        return Util.roundHundreths(encoderSum / (double)rightGearbox.motors.length);
-    }
-
-    public double rightEncoderVelocity(){
-        double encoderSum = 0;
-        for(Motor motor : rightGearbox.motors){
-            encoderSum += motor.getEncoderVelocity();
-        }
-        return Util.roundHundreths(encoderSum / (double)rightGearbox.motors.length);
-    }
-
     
 
 

@@ -2,7 +2,7 @@ package org.chis.sim;
 
 import java.util.ArrayList;
 
-import org.chis.sim.Util.Vector2D;
+import org.chis.sim.math.*;
 
 import java.awt.Color;
 

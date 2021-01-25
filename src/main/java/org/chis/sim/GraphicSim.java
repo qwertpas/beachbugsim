@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.chis.sim.Util.Vector2D;
+import org.chis.sim.math.*;
 
 //draws the robot
 public class GraphicSim extends JPanel {
@@ -101,9 +101,9 @@ public class GraphicSim extends JPanel {
 			
 			
 		//robot transform in pixels
-		int[] robotPixelPos = meterToPixel(Main.robot.x, Main.robot.y);
+		int[] robotPixelPos = meterToPixel(Main.robot.robotPos.x, Main.robot.robotPos.y);
 		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
-		g2d.rotate(Main.robot.heading);
+		g2d.rotate(Main.robot.robotPos.ang);
 
 		//scaling down to draw robot and then scaling back up
         g2d.scale(robotScale, robotScale);
@@ -129,6 +129,10 @@ public class GraphicSim extends JPanel {
     public int[] meterToPixel(double xMeters, double yMeters){
         int pixelX = (int) (xMeters * Constants.DISPLAY_SCALE.getDouble());
 		int pixelY = (int) (yMeters * Constants.DISPLAY_SCALE.getDouble());
+		
+		pixelX = (int) Util.centerModulo(pixelX, windowWidth/2);
+		pixelY = (int) Util.centerModulo(pixelY, windowWidth/2);
+
         return new int[] {pixelX, pixelY};
     }
 
