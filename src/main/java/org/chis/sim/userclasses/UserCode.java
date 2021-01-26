@@ -25,13 +25,22 @@ public class UserCode{
         CoaxSwerveModule BR = (CoaxSwerveModule) Main.robot.wheels[2];
         CoaxSwerveModule FR = (CoaxSwerveModule) Main.robot.wheels[3];
 
-        double powerL = -Controls.rawY + Controls.rawX * 1;
-        double powerR = -Controls.rawY - Controls.rawX * 1;
+        // double powerL = -Controls.rawY + Controls.rawX * 1;
+        // double powerR = -Controls.rawY - Controls.rawX * 1;
+        double powerL = 0.5;
+        double powerR = 0.5;
 
         FL.driveMotor.setPower(powerL);
         BL.driveMotor.setPower(powerL);
         BR.driveMotor.setPower(powerR);
         FR.driveMotor.setPower(powerR);
+
+        double turnpower = -Controls.rawY * 0.5;
+
+        FL.turnMotor.setPower(turnpower);
+        BL.turnMotor.setPower(turnpower);
+        BR.turnMotor.setPower(turnpower);
+        FR.turnMotor.setPower(turnpower);
         
 
         trail.add(Main.robot.robotPos.getVector2D());
@@ -42,13 +51,16 @@ public class UserCode{
         dynamics.putNumber("netForce.y", Main.robot.netForce.y, Color.BLUE);
         dynamics.putNumber("netTorque", Main.robot.netTorque, Color.GREEN.darker());
 
-        state.putNumber("pos", Main.robot.robotPos.ang, Color.RED);
-        state.putNumber("vel", Main.robot.robotVel.ang, Color.BLUE);
-        state.putNumber("acc", Main.robot.robotAcc.ang, Color.GREEN.darker());
+        state.putNumber("pos", Main.robot.robotPos.getMagnitude(), Color.RED);
+        state.putNumber("vel", Main.robot.robotVel.getMagnitude(), Color.BLUE);
+        state.putNumber("acc", Main.robot.robotAcc.getMagnitude(), Color.GREEN.darker());
 
         Printouts.put("x", Main.robot.robotPos.x);
         Printouts.put("y", Main.robot.robotPos.y);
         Printouts.put("Heading", Main.robot.robotPos.ang);
+
+        Printouts.put("FL angle", FL.wheelTurnIntegrator.pos);
+
 
     
 

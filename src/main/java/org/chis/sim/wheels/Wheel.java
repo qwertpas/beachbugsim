@@ -3,6 +3,11 @@ package org.chis.sim.wheels;
 import org.chis.sim.math.*;
 
 public abstract class Wheel {
+
+    public enum WheelType{
+        CoaxSwerveModule, DiffSwerveModule, FixedWheel, OmniWheel;
+    }
+    public WheelType wheelType;
     
     public Pose2D placement; //pose relative to robot center
     public double wheelRadius;
@@ -23,5 +28,6 @@ public abstract class Wheel {
         // System.out.println("spin: " + spinComponent);
     }
 
+    
 
 }

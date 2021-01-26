@@ -45,8 +45,12 @@ public class Pose2D extends Vector2D {
         return new Pose2D(getVector2D().subtract(toSub.getVector2D()), ang - toSub.ang);
     }
 
-    public Pose2D rotate(double radiansToRotate) {
+    public Pose2D rotateAll(double radiansToRotate) {
         return new Pose2D(getVector2D().rotate(radiansToRotate), ang + radiansToRotate);
+    }
+
+    public Pose2D rotateAng(double radiansToRotate) {
+        return new Pose2D(getVector2D(), ang + radiansToRotate);
     }
 
     @Override

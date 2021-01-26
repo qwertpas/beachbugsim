@@ -10,7 +10,7 @@ public class Robot{
 
     public Wheel[] wheels = {
         new CoaxSwerveModule(
-            new Pose2D(1, 1, 0), 
+            new Pose2D(0.3302, 0.3302, 0), 
             Constants.WHEEL_RADIUS.getDouble(), 
             new Motor(MotorType.FALCON, 1), 
             new Motor(MotorType.FALCON, 1), 
@@ -19,7 +19,7 @@ public class Robot{
             6.86
         ),
         new CoaxSwerveModule(
-            new Pose2D(-1, 1, 0), 
+            new Pose2D(-0.3302, 0.3302, 0), 
             Constants.WHEEL_RADIUS.getDouble(), 
             new Motor(MotorType.FALCON, 1), 
             new Motor(MotorType.FALCON, 1), 
@@ -28,7 +28,7 @@ public class Robot{
             6.86
         ),
         new CoaxSwerveModule(
-            new Pose2D(-1, -1, 0), 
+            new Pose2D(-0.3302, -0.3302, 0), 
             Constants.WHEEL_RADIUS.getDouble(), 
             new Motor(MotorType.FALCON, 1), 
             new Motor(MotorType.FALCON, 1), 
@@ -37,7 +37,7 @@ public class Robot{
             6.86
         ),
         new CoaxSwerveModule(
-            new Pose2D(1, -1, 0), 
+            new Pose2D(0.3302, -0.3302, 0), 
             Constants.WHEEL_RADIUS.getDouble(), 
             new Motor(MotorType.FALCON, 1), 
             new Motor(MotorType.FALCON, 1), 

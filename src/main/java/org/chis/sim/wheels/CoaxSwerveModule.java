@@ -2,7 +2,6 @@ package org.chis.sim.wheels;
 
 import org.chis.sim.Motor;
 import org.chis.sim.Util;
-import org.chis.sim.Motor.MotorType;
 import org.chis.sim.math.*;
 import org.chis.sim.math.Vector2D.Type;
 
@@ -25,6 +24,7 @@ public class CoaxSwerveModule extends Wheel {
         double TURN_GR,
         double ROLL_GR
     ){
+        wheelType = WheelType.CoaxSwerveModule;
         this.placement = placement;
         this.wheelRadius = wheelRadius;
         this.driveMotor = driveMotor;
@@ -44,8 +44,8 @@ public class CoaxSwerveModule extends Wheel {
         turnTorque = Util.applyFrictions(
             turnTorque, 
             wheelTurnIntegrator.vel, 
-            60, 
-            50, 
+            10, 
+            10, 
             0.1, 
             0.01
         );
@@ -80,7 +80,7 @@ public class CoaxSwerveModule extends Wheel {
         double scrubForce = Util.applyFrictions(
             0,
             wheelTranslation.y,
-            200,
+            190,
             190,
             0,
             0.01
