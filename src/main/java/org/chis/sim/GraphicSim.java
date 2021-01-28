@@ -163,7 +163,8 @@ public class GraphicSim extends JPanel {
 					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 3, g2d);
 					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2.8, g2d);
 
-					drawForce(coax.placement, new Vector2D(coax.force.x, coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
+					// drawForce(coax.placement, new Vector2D(coax.force.getMagnitude(), coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
+					drawForce(coax.placement, coax.force.rotate(coax.wheelTurnIntegrator.pos + coax.placement.ang), 0.2, g2d);
 					// g2d.drawImage(wheelImage, 100, 100, this);
 					break;
 				case DiffSwerveModule:
@@ -243,6 +244,11 @@ public class GraphicSim extends JPanel {
 		synchronized(userPointsGlobal){
 			userPointsGlobal.add(new Serie("globalDrawing", color, path));
 		}	
+	}
+	
+	public static void clearDrawing(){
+		userPointsGlobal.clear();
+		userPointsRobot.clear();
 	}
 
 	public static class PathPlotter{

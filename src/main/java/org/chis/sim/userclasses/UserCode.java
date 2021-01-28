@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.chis.sim.*;
 import org.chis.sim.Motor.MotorType;
 import org.chis.sim.math.*;
-import org.chis.sim.wheels.CoaxSwerveModule;
 
 
 public class UserCode{
@@ -35,18 +34,18 @@ public class UserCode{
         
         
 
-        double powerL = -Controls.rawY + Controls.rawX * 1;
-        double powerR = -Controls.rawY - Controls.rawX * 1;
-        // double powerL = 0.5;
-        // double powerR = 0.5;
+        // double powerL = -Controls.rawY + Controls.rawX * 1;
+        // double powerR = -Controls.rawY - Controls.rawX * 1;
+        double powerL = 1;
+        double powerR = 1;
 
         FLdrive.setPower(powerL);
         BLdrive.setPower(powerL);
         BRdrive.setPower(powerR);
         FRdrive.setPower(powerR);
 
-        // double turnpower = -Controls.rawY * 0.5;
-        double turnpower = -Controls.rawY * 0.0;
+        double turnpower = -Controls.rawY * 0.5;
+        // double turnpower = -Controls.rawY * 0.0;
 
         FLturn.setPower(turnpower);
         BLturn.setPower(turnpower);
@@ -75,7 +74,8 @@ public class UserCode{
     }
 
     public static double encoderToDist(double encoder){
-        return encoder / MotorType.FALCON.TICKS_PER_REV / 6.86 * 2 * Math.PI * Constants.WHEEL_RADIUS.getDouble();
+        double driveGearRatio = 6.86;
+        return encoder / MotorType.FALCON.TICKS_PER_REV / driveGearRatio * 2 * Math.PI * Constants.WHEEL_RADIUS.getDouble();
     }
 
 

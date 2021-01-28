@@ -99,6 +99,7 @@ public class Main {
                 if(!paused){
                     clock.start();
 
+                    GraphicSim.clearDrawing();
                     UserCode.execute();
                     Controls.updateControls();
                     printouts.repaint();
