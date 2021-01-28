@@ -149,7 +149,7 @@ public class GraphicSim extends JPanel {
 		g.setColor(Color.BLACK);
 		g2d.fillRect(-robotWidthDisplay / 2, -robotLengthDisplay / 2, robotWidthDisplay, robotLengthDisplay);
 
-		g.setColor(Color.white);
+		g.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(robotLengthDisplay/2 - 10, -5, 10, 10);
 		
 		g.setColor(Color.RED);
@@ -161,7 +161,7 @@ public class GraphicSim extends JPanel {
 					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 3, g2d);
 					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2.8, g2d);
 
-					drawForce(coax.placement, new Vector2D(coax.driveMotor.torque, coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 10, g2d);
+					drawForce(coax.placement, new Vector2D(coax.force.x, coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
 					// g2d.drawImage(wheelImage, 100, 100, this);
 					break;
 				case DiffSwerveModule:

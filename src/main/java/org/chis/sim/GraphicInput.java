@@ -23,7 +23,9 @@ public class GraphicInput extends JFrame implements ActionListener {
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initComponents();
-        setSize(200, GraphicSim.screenHeight);
+
+        int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        setSize(200, screenHeight);
     }
 
     private void initComponents() {

@@ -44,7 +44,9 @@ public class Constants{
      * //////////////////////////////// */  
     public static Constant CONTROLLER_INDEX = new Constant("Controller_INDEX", 0, Type.INT); //which joystick?
     public static Constant DISPLAY_SCALE = new Constant("DISPLAY_SCALE", 75, Type.DOUBLE); //in pixels per meter
-    public static Constant DT = new Constant("DT", 0.001, Type.DOUBLE); //in seconds per update
+    public static Constant PHYSICS_DT = new Constant("PHYSICS_DT", 0.001, Type.DOUBLE); //in seconds per update
+    public static Constant USERCODE_DT = new Constant("USERCODE_DT", 0.02, Type.DOUBLE); //in seconds per update
+    public static Constant DISPLAY_DT = new Constant("DISPLAY_DT", 0.015, Type.DOUBLE); //frames per second for display updates
     public static Constant SIMSPEED = new Constant("SIMSPEED", 1, Type.DOUBLE); //simulator speed (1 being normal, 2 being fast)
 
 
@@ -67,7 +69,9 @@ public class Constants{
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
      * //////////////////////////////// */  
     public static Constant[] constants = {
-        DT,
+        PHYSICS_DT,
+        USERCODE_DT,
+        DISPLAY_DT,
         TURN_ERROR,
         STATIC_FRIC_COEFF,
         KINE_FRIC_COEFF,

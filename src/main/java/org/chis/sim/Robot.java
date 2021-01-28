@@ -8,44 +8,7 @@ import org.chis.sim.wheels.Wheel;
 //overarching physics simulation
 public class Robot{
 
-    public Wheel[] wheels = {
-        new CoaxSwerveModule(
-            new Pose2D(0.3302, 0.3302, 0), 
-            Constants.WHEEL_RADIUS.getDouble(), 
-            new Motor(MotorType.FALCON, 1), 
-            new Motor(MotorType.FALCON, 1), 
-            Constants.SWERVE_MOI.getDouble(), 
-            12.8, 
-            6.86
-        ),
-        new CoaxSwerveModule(
-            new Pose2D(-0.3302, 0.3302, 0), 
-            Constants.WHEEL_RADIUS.getDouble(), 
-            new Motor(MotorType.FALCON, 1), 
-            new Motor(MotorType.FALCON, 1), 
-            Constants.SWERVE_MOI.getDouble(), 
-            12.8, 
-            6.86
-        ),
-        new CoaxSwerveModule(
-            new Pose2D(-0.3302, -0.3302, 0), 
-            Constants.WHEEL_RADIUS.getDouble(), 
-            new Motor(MotorType.FALCON, 1), 
-            new Motor(MotorType.FALCON, 1), 
-            Constants.SWERVE_MOI.getDouble(), 
-            12.8, 
-            6.86
-        ),
-        new CoaxSwerveModule(
-            new Pose2D(0.3302, -0.3302, 0), 
-            Constants.WHEEL_RADIUS.getDouble(), 
-            new Motor(MotorType.FALCON, 1), 
-            new Motor(MotorType.FALCON, 1), 
-            Constants.SWERVE_MOI.getDouble(), 
-            12.8, 
-            6.86
-        ),
-    };
+    public Wheel[] wheels;
 
     //dynamics on the whole robot
     public Vector2D netForce = new Vector2D();
@@ -57,11 +20,49 @@ public class Robot{
     public Pose2D robotAcc = new Pose2D();
 
     //integrators
-    VerletIntegrator xIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
-    VerletIntegrator yIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
-    VerletIntegrator angIntegrator = new VerletIntegrator(0, 0, 0, Constants.DT.getDouble());
+    VerletIntegrator xIntegrator = new VerletIntegrator(0, 0, 0, Constants.PHYSICS_DT.getDouble());
+    VerletIntegrator yIntegrator = new VerletIntegrator(0, 0, 0, Constants.PHYSICS_DT.getDouble());
+    VerletIntegrator angIntegrator = new VerletIntegrator(0, 0, 0, Constants.PHYSICS_DT.getDouble());
 
     public void init(){
+        wheels = new Wheel[] {
+            new CoaxSwerveModule(
+                new Pose2D(0.3302, 0.3302, 0), 
+                Constants.WHEEL_RADIUS.getDouble(), 
+                new Motor(MotorType.FALCON, 1), 
+                new Motor(MotorType.FALCON, 1), 
+                Constants.SWERVE_MOI.getDouble(), 
+                12.8, 
+                6.86
+            ),
+            new CoaxSwerveModule(
+                new Pose2D(-0.3302, 0.3302, 0), 
+                Constants.WHEEL_RADIUS.getDouble(), 
+                new Motor(MotorType.FALCON, 1), 
+                new Motor(MotorType.FALCON, 1), 
+                Constants.SWERVE_MOI.getDouble(), 
+                12.8, 
+                6.86
+            ),
+            new CoaxSwerveModule(
+                new Pose2D(-0.3302, -0.3302, 0), 
+                Constants.WHEEL_RADIUS.getDouble(), 
+                new Motor(MotorType.FALCON, 1), 
+                new Motor(MotorType.FALCON, 1), 
+                Constants.SWERVE_MOI.getDouble(), 
+                12.8, 
+                6.86
+            ),
+            new CoaxSwerveModule(
+                new Pose2D(0.3302, -0.3302, 0), 
+                Constants.WHEEL_RADIUS.getDouble(), 
+                new Motor(MotorType.FALCON, 1), 
+                new Motor(MotorType.FALCON, 1), 
+                Constants.SWERVE_MOI.getDouble(), 
+                12.8, 
+                6.86
+            ),
+        };
     }
 
     public void update(double dt){
@@ -75,16 +76,6 @@ public class Robot{
             netTorque = netTorque + wheel.force.pcross(wheel.placement.getVector2D());
         }
         netForce = netForce.rotate(robotPos.ang);
-
-        //wheels scrub, applying a frictional torque that slows turning
-        // netTorque = Util.applyFrictions(
-        //     netTorque, 
-        //     robotVel.ang, 
-        //     Constants.SCRUB_STATIC, 
-        //     Constants.SCRUB_KINE, 
-        //     0, 
-        //     Constants.ANGVELO_THRESHOLD.getDouble())
-        // ;
 
         //Newton's 2nd Law to find accelerations given forces and torques
         robotAcc.setVector2D(netForce.scalarDiv(Constants.ROBOT_MASS.getDouble()));
@@ -100,16 +91,6 @@ public class Robot{
         robotPos = new Pose2D(xIntegrator.pos, yIntegrator.pos, angIntegrator.pos);
     }
 
-
-    void printDebug(){
-        System.out.println("Pos: " + robotPos);
-        System.out.println("Vel: " + robotVel);
-        System.out.println("Acc: " + robotAcc);
-        System.out.println("netForce: " + netForce);
-        System.out.println("netTorque: " + netTorque);
-        System.out.println("——————————————————");
-    }
-    
 
 
 }

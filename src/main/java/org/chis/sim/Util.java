@@ -357,5 +357,24 @@ public class Util {
     }
   }
 
+  public static class LooptimeMonitor{
+    public long startTime;
+    public double codetime;
+
+    public long lasttime;
+    public double looptime;
+
+    public void start(){
+      startTime = System.nanoTime();
+    }
+
+    public void end(){
+      codetime = (System.nanoTime() - startTime) * 1e-9;
+
+      looptime = (System.nanoTime() - lasttime) * 1e-9;
+      lasttime = System.nanoTime();
+    }
+  }
+
 
 }

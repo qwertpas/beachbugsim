@@ -46,7 +46,7 @@ public class CoaxSwerveModule extends Wheel {
             wheelTurnIntegrator.vel, 
             10, 
             10, 
-            0.1, 
+            1, 
             0.01
         );
 

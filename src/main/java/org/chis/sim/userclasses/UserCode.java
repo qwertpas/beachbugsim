@@ -25,17 +25,18 @@ public class UserCode{
         CoaxSwerveModule BR = (CoaxSwerveModule) Main.robot.wheels[2];
         CoaxSwerveModule FR = (CoaxSwerveModule) Main.robot.wheels[3];
 
-        // double powerL = -Controls.rawY + Controls.rawX * 1;
-        // double powerR = -Controls.rawY - Controls.rawX * 1;
-        double powerL = 0.5;
-        double powerR = 0.5;
+        double powerL = -Controls.rawY + Controls.rawX * 1;
+        double powerR = -Controls.rawY - Controls.rawX * 1;
+        // double powerL = 0.5;
+        // double powerR = 0.5;
 
         FL.driveMotor.setPower(powerL);
         BL.driveMotor.setPower(powerL);
         BR.driveMotor.setPower(powerR);
         FR.driveMotor.setPower(powerR);
 
-        double turnpower = -Controls.rawY * 0.5;
+        // double turnpower = -Controls.rawY * 0.5;
+        double turnpower = -Controls.rawY * 0.0;
 
         FL.turnMotor.setPower(turnpower);
         BL.turnMotor.setPower(turnpower);
