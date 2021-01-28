@@ -32,7 +32,7 @@ public class Main {
             }
 
             try {
-                Thread.sleep((int)(Constants.PHYSICS_DT.getDouble() * 1000 / Constants.SIMSPEED.getDouble()));
+                Thread.sleep((int) (1000 * Constants.PHYSICS_DT.getDouble() / Constants.SIMSPEED.getDouble()));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class Main {
                     GraphicSim.sim.repaint();
 
                     clock.end();
-                    System.out.println("Display looptime: " + 1000 * clock.looptime);
+                    // System.out.println("Display looptime: " + 1000 * clock.looptime);
                 }
                 try{
                     double sleeptime = Math.max(0, Constants.DISPLAY_DT.getDouble() - clock.codetime); //in seconds
@@ -99,7 +99,6 @@ public class Main {
                 if(!paused){
                     clock.start();
 
-                    GraphicSim.clearDrawing();
                     UserCode.execute();
                     Controls.updateControls();
                     printouts.repaint();
@@ -107,11 +106,11 @@ public class Main {
 
                     clock.end();
 
-                    System.out.println("Usercode looptime: " + 1000 * clock.looptime);
+                    // System.out.println("Usercode looptime: " + 1000 * clock.looptime);
                 }
 
                 try{
-                    double sleeptime = Math.max(0, Constants.USERCODE_DT.getDouble() - clock.codetime - 0.002); //in seconds
+                    double sleeptime = Math.max(0, Constants.USERCODE_DT.getDouble() - clock.codetime); //in seconds
                     Thread.sleep((int) (sleeptime * 1000)); //in milliseconds
                 }catch(InterruptedException e){
                     e.printStackTrace();

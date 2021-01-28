@@ -16,7 +16,6 @@ public class GraphicInput extends JFrame implements ActionListener {
     static JButton buttonSave = new JButton("Save");
     static JButton buttonPause = new JButton("Pause");
     static JButton buttonReset = new JButton("Reset");
-
     
     public GraphicInput() {
         super("Input");
@@ -34,6 +33,7 @@ public class GraphicInput extends JFrame implements ActionListener {
         panel.add(buttonSave);
         panel.add(buttonPause);
         panel.add(buttonReset);
+        
         buttonSave.addActionListener(this);
         buttonPause.addActionListener(this);
         buttonReset.addActionListener(this);

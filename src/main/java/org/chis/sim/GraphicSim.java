@@ -135,19 +135,21 @@ public class GraphicSim extends JPanel {
 		for(Wheel wheel : Main.robot.wheels){
 			double xDist = 2 * (Math.abs(wheel.placement.x) + 2 * wheel.wheelRadius);
 			double yDist = 2 * (Math.abs(wheel.placement.y) + 2 * wheel.wheelRadius);
-			if(xDist > robotWidthReal){
-				robotWidthReal = xDist;
+
+			if(xDist > robotLengthReal){
+				robotLengthReal = xDist;
 			}
-			if(yDist > robotLengthReal){
-				robotLengthReal = yDist;
+			if(yDist > robotWidthReal){
+				robotWidthReal = yDist;
 			}
 		}
+
 
 		int robotWidthDisplay = (int) (DISP_SCALE * robotWidthReal); //width of robot in pixels
 		int robotLengthDisplay = (int) (DISP_SCALE * robotLengthReal); //length of robot in pixels
 
 		g.setColor(Color.BLACK);
-		g2d.fillRect(-robotWidthDisplay / 2, -robotLengthDisplay / 2, robotWidthDisplay, robotLengthDisplay);
+		g2d.fillRect(-robotLengthDisplay / 2, -robotWidthDisplay / 2, robotLengthDisplay, robotWidthDisplay);
 
 		g.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(robotLengthDisplay/2 - 10, -5, 10, 10);
@@ -183,8 +185,8 @@ public class GraphicSim extends JPanel {
 			for(Serie serie : userPointsRobot){
 				g.setColor(serie.color);
 				for(int i = 0; i < serie.points.size() - 1; i++){
-					int[] scaledPos1 = meterToPixel(serie.points.get(i).x, serie.points.get(i).y, false);
-					int[] scaledPos2 = meterToPixel(serie.points.get(i + 1).x, serie.points.get(i + 1).y, false);
+					int[] scaledPos1 = meterToPixel(serie.points.get(i).x, serie.points.get(i).y, true);
+					int[] scaledPos2 = meterToPixel(serie.points.get(i + 1).x, serie.points.get(i + 1).y, true);
 					g.drawLine(scaledPos1[0], scaledPos1[1], scaledPos2[0], scaledPos2[1]);
 				}
 			}
@@ -241,11 +243,6 @@ public class GraphicSim extends JPanel {
 		synchronized(userPointsGlobal){
 			userPointsGlobal.add(new Serie("globalDrawing", color, path));
 		}	
-	}
-	
-	public static void clearDrawing(){
-		userPointsGlobal.clear();
-		userPointsRobot.clear();
 	}
 
 	public static class PathPlotter{

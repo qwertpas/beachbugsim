@@ -137,7 +137,7 @@ public class GraphicDash extends JPanel{
 
                         g.fillOval(displayX, displayY, serie.lineWidth, serie.lineWidth);
                     }
-                    g.drawString(serie.name, displayX, displayY);
+                    g.drawString(serie.name, displayX - 30, displayY - 10);
                 }
                 
             }

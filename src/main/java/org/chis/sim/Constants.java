@@ -13,27 +13,11 @@ public class Constants{
     public static Constant MAX_VOLTAGE = new Constant("MAX_VOLTAGE", 12, Type.DOUBLE);
 
     public static Constant ROBOT_MASS = new Constant("ROBOT_MASS", 45, Type.DOUBLE); //about 100 lbs
-    public static Constant ROBOT_WIDTH = new Constant("ROBOT_WIDTH", Util.inchesToMeters(24), Type.DOUBLE);
-    public static Constant DIST_BETWEEN_WHEELS = new Constant("DIST_BETWEEN_WHEELS", Util.inchesToMeters(20), Type.DOUBLE);
-    public static Constant WHEEL_RADIUS = new Constant("WHEEL_RADIUS", Util.inchesToMeters(2.5), Type.DOUBLE);
+    public static Constant WHEEL_RADIUS = new Constant("WHEEL_RADIUS", Util.inchesToMeters(2), Type.DOUBLE);
+    public static Constant WHEEL_XDIST = new Constant("WHEEL_XDIST", Util.inchesToMeters(12), Type.DOUBLE);
+    public static Constant WHEEL_YDIST = new Constant("WHEEL_YDIST", Util.inchesToMeters(11), Type.DOUBLE);
 
     public static Constant SWERVE_MOI = new Constant("SWERVE_MOI", 0.1, Type.DOUBLE);
-
-    //Slows robot rotation
-    public static Constant STATIC_FRIC_COEFF = new Constant("STATIC_FRIC_COEFF", 1.1, Type.DOUBLE); //between wheels and ground
-    public static Constant KINE_FRIC_COEFF = new Constant("KINE_FRIC_COEFF", 0.9, Type.DOUBLE); //should be < static
-    public static Constant SCRUB_COEFF = new Constant("SCRUB_COEFF", 0.2, Type.DOUBLE); //proportion of weight that rests on scrubbing wheels (depends on dropcenter)
-
-    //Slows gearboxes
-    public static Constant GEAR_STATIC_FRIC = new Constant("GEAR_STATIC_FRIC", 2, Type.DOUBLE); //actual torque against gearbox when not moving, not the coefficient 
-    public static Constant GEAR_KINE_FRIC = new Constant("GEAR_KINE_FRIC", 1.5, Type.DOUBLE); //actual torque against gearbox when moving, not the coefficient
-    public static Constant GEAR_VISCOUS_FRIC = new Constant("GEAR_VISCOUS_FRIC", 0.1, Type.DOUBLE); //coefficient that will be multiplied to gearbox angvelo to get friction
-
-    //Thresholds that decide whether something is moving, so the sim can choose kinetic or static friction
-    public static Constant ANGVELO_THRESHOLD = new Constant("ANGVELO_THRESHOLD", 0.0001, Type.DOUBLE); //lowest moving rad/sec
-    public static Constant LINVELO_THRESHOLD = new Constant("LINVELO_THRESHOLD", 0.0001, Type.DOUBLE); //lowest moving m/sec
-
-    public static Constant GRAV_ACCEL = new Constant("GRAV_ACCEL", 9.81, Type.DOUBLE);
 
     //Build problems
     public static Constant TURN_ERROR = new Constant("TURN_ERROR", 0.0, Type.DOUBLE); //torque that will be added/subtracted from left/right
@@ -51,21 +35,6 @@ public class Constants{
 
 
     /** ////////////////////////////////
-     * USERCODE
-     * //////////////////////////////// */  
-    public static Constant DRIVE_OPTION = new Constant("DRIVE_OPTION", 0, Type.INT);
-    public static Constant MAX_SPEED = new Constant("MAX_SPEED", 3.5, Type.DOUBLE);
-    public static Constant MAX_SPIN = new Constant("MAX_SPIN", 5, Type.DOUBLE);
-    public static Constant SENSCURVE_EXP = new Constant("SENSCURVE_EXP", 1.5, Type.DOUBLE);
-    public static Constant JOYSTICK_DEADBAND = new Constant("JOYSTICK_DEADBAND", 0.1, Type.DOUBLE);
-    public static Constant SPIN_DEADBAND = new Constant("SPIN_DEADBAND", 0.1, Type.DOUBLE);
-    public static Constant DELTA_CORRECTION = new Constant("DELTA_CORRECTION", 1, Type.DOUBLE);
-    public static Constant VELO_CORRECTION = new Constant("VELO_CORRECTION", 1.2, Type.DOUBLE);
-    public static Constant OPP_VELO_CORRECTION = new Constant("OPP_VELO_CORRECTION", 0.1, Type.DOUBLE);
-    public static Constant FRICTION_RATIO = new Constant("FRICTION_RATIO", 0.1, Type.DOUBLE);
-
-
-    /** ////////////////////////////////
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
      * //////////////////////////////// */  
     public static Constant[] constants = {
@@ -73,11 +42,11 @@ public class Constants{
         USERCODE_DT,
         DISPLAY_DT,
         TURN_ERROR,
-        STATIC_FRIC_COEFF,
-        KINE_FRIC_COEFF,
-        GEAR_STATIC_FRIC,
-        GEAR_KINE_FRIC,
-        GEAR_VISCOUS_FRIC,
+        ROBOT_MASS,
+        SWERVE_MOI,
+        WHEEL_RADIUS,
+        WHEEL_XDIST,
+        WHEEL_YDIST,
         DISPLAY_SCALE,
     };
 

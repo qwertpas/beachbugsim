@@ -1,5 +1,7 @@
 package org.chis.sim;
 
+import org.chis.sim.math.TrapIntegrator;
+
 public class Motor{
 
     public enum MotorType{
@@ -22,10 +24,11 @@ public class Motor{
     public final MotorType motorType;
     public double voltage;
     public double angVelo; //angular velocity in radians per second
-    public double angVeloPrev; //store previous angular velocity 
     public double torque; //newton*meters
     public double position; //motor shaft in radians
     public double numMotors;
+
+    private TrapIntegrator encoder = new TrapIntegrator(0);
 
     public Motor(MotorType motorType, double numMotors){
         this.numMotors = numMotors;
@@ -42,18 +45,13 @@ public class Motor{
         //calculates torque based on motor torque-angvelo graph: https://www.desmos.com/calculator/nmge6gksgj 
         torque = motorType.STALL_TORQUE * ((voltage / Constants.MAX_VOLTAGE.getDouble()) - (angVelo / motorType.FREE_SPEED));
 
-        integrateEncoder();
+        integrateEncoder(dt);
     }
 
     //integrates angular velocity to get angular position 
-    public long lastTime = System.nanoTime();
-    public double dt;
-    public void integrateEncoder(){
-        dt = (System.nanoTime() - lastTime) * 1e-9; //change in time (seconds) used for integrating
-        lastTime = System.nanoTime();
-
-        position += 0.5 * (angVelo + angVeloPrev) * dt;
-        angVeloPrev = angVelo;
+    public void integrateEncoder(double dt){
+        encoder.update(angVelo, dt);
+        position = encoder.pos;
     }
 
     public double getEncoderPosition(){
@@ -69,7 +67,7 @@ public class Motor{
     }
 
     public void resetEncoder(){
-        position = 0;
+        encoder.pos = 0;
     }
 
     
