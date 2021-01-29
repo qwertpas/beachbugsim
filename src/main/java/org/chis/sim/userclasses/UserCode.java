@@ -20,6 +20,7 @@ public class UserCode{
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
 
+        // Pretend these are CAN IDs
         Motor FLdrive = Main.robot.motors.get(0);
         Motor FLturn = Main.robot.motors.get(1);
 
@@ -33,7 +34,6 @@ public class UserCode{
         Motor FRturn = Main.robot.motors.get(7);
         
         
-
         // double powerL = -Controls.rawY + Controls.rawX * 1;
         // double powerR = -Controls.rawY - Controls.rawX * 1;
         double powerL = 1;

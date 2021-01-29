@@ -39,7 +39,7 @@ public class GraphicSim extends JPanel {
 
 	static double DISP_SCALE;
 
-	static AffineTransform before;
+	static AffineTransform robotTransform;
 
 	public static String imagesDirectory = "./src/images/";
 
@@ -124,11 +124,7 @@ public class GraphicSim extends JPanel {
 		int[] robotPixelPos = meterToPixel(Main.robot.robotPos.x, Main.robot.robotPos.y, true);
 		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
 		g2d.rotate(Main.robot.robotPos.ang);
-
-		//scaling down to draw robot and then scaling back up
-        // g2d.scale(robotScale, robotScale);
-		// g.drawImage(robotImage, -robotImage.getWidth()/2, -robotImage.getHeight()/2, this);
-		// g2d.scale(1/robotScale, 1/robotScale);
+		robotTransform = g2d.getTransform();
 
 		double robotWidthReal = 0;
 		double robotLengthReal = 0;
@@ -163,18 +159,16 @@ public class GraphicSim extends JPanel {
 					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 3, g2d);
 					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2.8, g2d);
 
-					// drawForce(coax.placement, new Vector2D(coax.force.getMagnitude(), coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
-					drawForce(coax.placement, coax.force.rotate(coax.wheelTurnIntegrator.pos + coax.placement.ang), 0.2, g2d);
-					// g2d.drawImage(wheelImage, 100, 100, this);
+					drawForce(coax.placement, new Vector2D(coax.driveForce, coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
 					break;
 				case DiffSwerveModule:
 					drawCentered(coaxModuleImage, wheel.placement, wheel.wheelRadius * 2, g2d);
 					break;
 				case FixedWheel:
-					g.drawImage(robotImage, -robotImage.getWidth()/2, -robotImage.getHeight()/2, this);
+					drawCentered(wheelImage, wheel.placement, wheel.wheelRadius * 2, g2d);
 					break;
 				case OmniWheel:
-					g.drawImage(robotImage, -robotImage.getWidth()/2, -robotImage.getHeight()/2, this);
+					drawCentered(omniWheelImage, wheel.placement, wheel.wheelRadius * 2, g2d);
 					break;
 				default:
 					break;
@@ -206,19 +200,16 @@ public class GraphicSim extends JPanel {
 
 		g2d.drawImage(img, -img.getWidth()/2, -img.getWidth()/2, this);
 
-		g2d.rotate(-offset.ang);
-		g2d.scale(1/scale, 1/scale);
-		g2d.translate(-DISP_SCALE * offset.x, -DISP_SCALE * offset.y);
+		g2d.setTransform(robotTransform); //going back to robot centered
 	}
 
 	public void drawForce(Pose2D offset, Vector2D force, double scale, Graphics2D g2d){
 		g2d.translate(DISP_SCALE * offset.x, DISP_SCALE * offset.y);
+
 		g2d.rotate(offset.ang);
-
 		g2d.drawLine(0, 0, (int) (force.x * scale), (int) (force.y * scale));
-
-		g2d.rotate(-offset.ang);
-		g2d.translate(-DISP_SCALE * offset.x, -DISP_SCALE * offset.y);
+		
+		g2d.setTransform(robotTransform); //going back to robot centered
 	}
 
 	

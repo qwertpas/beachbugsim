@@ -9,6 +9,8 @@ public class CoaxSwerveModule extends Wheel {
 
     public Motor driveMotor, turnMotor;
 
+    public double driveForce, scrubForce;
+
     final double TURN_MOI;
     final double TURN_GR;
     final double ROLL_GR;
@@ -75,9 +77,9 @@ public class CoaxSwerveModule extends Wheel {
             0,
             0.001
         );
-        double driveForce = driveTorque / wheelRadius;
+        driveForce = driveTorque / wheelRadius;
 
-        double scrubForce = Util.applyFrictions(
+        scrubForce = Util.applyFrictions(
             0,
             wheelTranslation.y,
             190,
