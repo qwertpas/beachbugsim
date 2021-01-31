@@ -1,7 +1,7 @@
 package org.chis.sim;
 
 import org.chis.sim.Util.LooptimeMonitor;
-import org.chis.sim.userclasses.UserCode;
+import org.chis.userclasses.UserCode;
 
 //runs all of the components together
 public class Main {

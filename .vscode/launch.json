@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Odometry",
+            "request": "launch",
+            "mainClass": "org.chis.sim.userclasses.Odometry",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
             "name": "Launch Robot",
             "request": "launch",
             "mainClass": "org.chis.sim.Robot",

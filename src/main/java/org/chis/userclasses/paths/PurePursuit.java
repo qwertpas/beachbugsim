@@ -1,4 +1,4 @@
-package org.chis.sim.userclasses.paths;
+package org.chis.userclasses.paths;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package org.chis.sim.userclasses;
+package org.chis.userclasses;
 
 import java.awt.Color;
 import java.util.ArrayList;
