@@ -160,7 +160,7 @@ public class Util {
     double P, I, D, power;
 
     Boolean initialized = false;
-    public void loop(double currentValue, double target) {
+    public double loop(double currentValue, double target) {
       if (!initialized) {
         lastError = target;
         lastTime = System.nanoTime();
@@ -183,6 +183,7 @@ public class Util {
       D = kD * (lastError - error) / dt;
 
       power = P + I + D;
+      return power;
     }
 
     public double getPower(){

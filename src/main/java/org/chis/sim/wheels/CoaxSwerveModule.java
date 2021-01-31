@@ -53,7 +53,7 @@ public class CoaxSwerveModule extends Wheel {
         );
 
         wheelTurnIntegrator.update(turnTorque / TURN_MOI, dt);
-        turnMotor.update(wheelTurnIntegrator.vel / TURN_GR, dt);
+        turnMotor.update(wheelTurnIntegrator.vel * TURN_GR, dt);
 
         // System.out.println("vel: " + wheelTurnIntegrator.vel);
 

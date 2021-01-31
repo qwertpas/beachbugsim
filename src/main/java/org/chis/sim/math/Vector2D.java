@@ -67,6 +67,10 @@ public class Vector2D {
         return new Vector2D(this.x * cos - this.y * sin, this.x * sin + this.y * cos, Type.CARTESIAN);
     }
 
+    public Vector2D rotate90(){
+        return new Vector2D(-this.y, this.x, Type.CARTESIAN);
+    }
+
     public double getMagnitude() {
         return Math.sqrt(x * x + y * y);
     }
