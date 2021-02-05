@@ -45,8 +45,11 @@ public class SwerveController {
             this.driveMotorID = driveMotorID;
             this.placement = placement;
 
-            turnPID.setkP(1);
-            drivePID.setkP(0.3);
+            turnPID.setkP(3);
+            turnPID.setkI(4, 0.5, 0.1);
+
+            drivePID.setkP(0.1);
+            drivePID.setkI(2, 1, 1);
         }
 
         public void move(Pose2D robotSpeeds){
@@ -56,15 +59,15 @@ public class SwerveController {
             // ask chis for vector math derivation
             targetAngle = linVelo.add(placement.rotate90().scalarMult(angVelo)).getAngle();
             targetDriveSpeed = linVelo.getMagnitude() + placement.getMagnitude() * angVelo;
-            if(reversed) targetDriveSpeed *= -1;
             
             currentAngle = getAngle();
             currentDriveSpeed = getDriveSpeed();
 
             targetAngleOptimized = calcClosestModuleAngle(currentAngle, targetAngle);
+            if(reversed) targetDriveSpeed *= -1;
 
             turnPower = turnPID.loop(currentAngle, targetAngleOptimized);
-            drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed) + targetDriveSpeed * 0.25;
+            drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed) + targetDriveSpeed * 0.45;
 
             Main.robot.motors.get(turnMotorID).setPower(turnPower);
             Main.robot.motors.get(driveMotorID).setPower(drivePower);

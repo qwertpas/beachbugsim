@@ -36,6 +36,7 @@ public class Motor{
     }
 
     public void setPower(double power){
+        power = Util.limit(power, 1);
         voltage = power * Constants.MAX_VOLTAGE.getDouble(); //assumes that robot system voltage is always at max (no brownout)
     }
 

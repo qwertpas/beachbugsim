@@ -17,10 +17,12 @@ public class UserCode{
     // static GraphicDash dynamics = new GraphicDash("dynamics", 100, true);
     // static GraphicDash state = new GraphicDash("state", 100, true);
 
-    static GraphicDash module0angle = new GraphicDash("module0angle", 100, true);
-    static GraphicDash module0drive = new GraphicDash("module0drive", 100, true);
+    // static GraphicDash module0angle = new GraphicDash("module0angle", 100, true);
+    // static GraphicDash module0drive = new GraphicDash("module0drive", 100, true);
     static GraphicDash speeds = new GraphicDash("speeds", 100, true);
-    static GraphicDash robotSpeeds = new GraphicDash("robotSpeeds", 100, true);
+    static GraphicDash angles = new GraphicDash("angles", 100, true);
+
+    static GraphicDash robotSpeeds = new GraphicDash("angles", 100, true);
     
 
     static final double offsetX = Constants.WHEEL_XDIST.getDouble();
@@ -41,11 +43,11 @@ public class UserCode{
 
         double heading = Main.robot.robotPos.ang;
 
-        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.rawZ);
+        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, 0);
         Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(2);
 
 
-        // Pose2D targetRobotSpeeds = new Pose2D(2, 2, -1);
+        // Pose2D targetRobotSpeeds = new Pose2D(1, 0, 0);
 
 
         swerve.move(targetRobotSpeeds);
@@ -65,26 +67,22 @@ public class UserCode{
         // dynamics.putNumber("netForceMag", Main.robot.netForce.getMagnitude(), Color.RED);
         // dynamics.putNumber("netTorque", Main.robot.netTorque, Color.GREEN.darker());
 
-        module0angle.putNumber("targetAngle", swerve.modules[0].targetAngleOptimized, Color.BLUE);
-        module0angle.putNumber("currentAngle", swerve.modules[0].currentAngle, Color.RED);
-        module0angle.putNumber("turnPower", swerve.modules[0].turnPower, Color.GREEN);
+        for(int i = 0; i < swerve.modules.length; i++){
+            angles.putNumber("targetAngle", swerve.modules[i].targetAngleOptimized, Color.BLUE);
+            angles.putNumber("currentAngle", swerve.modules[i].currentAngle, Color.RED);
 
-        module0drive.putNumber("targetSpeed", swerve.modules[0].targetDriveSpeed, Color.BLUE);
-        module0drive.putNumber("currentSpeed", swerve.modules[0].currentDriveSpeed, Color.RED);
-        module0drive.putNumber("drivePower", swerve.modules[0].drivePower, Color.GREEN);
+            speeds.putNumber("targetSpeed", swerve.modules[i].targetDriveSpeed, Color.BLUE);
+            speeds.putNumber("currentSpeed", swerve.modules[i].currentDriveSpeed, Color.RED);
+        }
 
-        speeds.putNumber("0", swerve.modules[0].currentDriveSpeed, Color.BLACK);
-        speeds.putNumber("1", swerve.modules[1].currentDriveSpeed, Color.BLACK);
-        speeds.putNumber("2", swerve.modules[2].currentDriveSpeed, Color.BLACK);
-        speeds.putNumber("3", swerve.modules[3].currentDriveSpeed, Color.BLACK);
+        robotSpeeds.putNumber("vx target", targetRobotSpeeds.x, Color.BLUE);  
+        robotSpeeds.putNumber("vx curr", Main.robot.robotVel.x, Color.RED);  
 
-        robotSpeeds.putNumber("currentAngvelo", Main.robot.robotVel.ang, Color.RED);
-        robotSpeeds.putNumber("targetDrive", swerve.modules[0].targetDriveSpeed, Color.magenta);
-        robotSpeeds.putNumber("targetAngvelo", targetRobotSpeeds.ang, Color.BLUE);
+        robotSpeeds.putNumber("vy target", targetRobotSpeeds.y, Color.BLUE);  
+        robotSpeeds.putNumber("vy curr", Main.robot.robotVel.y, Color.RED);  
 
-        Printouts.put("voltage0", Main.robot.motors.get(0).voltage);
-        Printouts.put("encoder1pos", Main.robot.motors.get(1).position);
-        
+        robotSpeeds.putNumber("ang target", targetRobotSpeeds.ang, Color.BLUE);  
+        robotSpeeds.putNumber("ang curr", Main.robot.robotVel.ang, Color.RED);  
 
         Printouts.put("x", Main.robot.robotPos.x);
         Printouts.put("y", Main.robot.robotPos.y);

@@ -29,7 +29,11 @@ public class Main {
             if(!paused){
                 elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9;
                 robot.update(Constants.PHYSICS_DT.getDouble());
+                // robot.update(Constants.PHYSICS_DT.getDouble());
+
             }
+
+
 
             try {
                 Thread.sleep((int) (1000 * Constants.PHYSICS_DT.getDouble() / Constants.SIMSPEED.getDouble()));
