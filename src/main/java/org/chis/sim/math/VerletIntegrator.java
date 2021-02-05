@@ -18,14 +18,38 @@ public class VerletIntegrator {
     }
 
     public void update(double acc, double dt){
-        double pos_next = pos + (pos - pos_prev)*(dt / dt_prev) + acc * dt * dt;
-        vel = (pos_next - pos_prev) / (dt + dt_prev);
+        // double pos_next = pos + (pos - pos_prev)*(dt / dt_prev) + acc * dt * dt;
+        // vel = (pos_next - pos_prev) / (dt + dt_prev);
         
-        pos_prev = pos;
-        pos = pos_next;
-        dt_prev = dt;
+        // pos_prev = pos;
+        // pos = pos_next;
+        // dt_prev = dt;
+        if(Math.signum(vel + acc * dt) != Math.signum(vel) && vel != 0){
+            vel = 0;
+        }else{
+            vel += acc * dt;
+        }
+        pos += vel * dt;
+    }
 
-        // vel += acc * dt;
-        // pos += vel * dt;
+    public static void main(String[] args) {
+        double dt = 0.1;
+
+        VerletIntegrator x = new VerletIntegrator(0, 0, 0, dt);
+
+        x.update(1, dt);
+        System.out.println(x.vel);
+
+        x.update(1, dt);
+        System.out.println(x.vel);
+
+        x.update(-1, dt);
+        System.out.println(x.vel);
+
+        x.update(-1, dt);
+        System.out.println(x.vel);
+
+        x.update(-1, dt);
+        System.out.println(x.vel);
     }
 }

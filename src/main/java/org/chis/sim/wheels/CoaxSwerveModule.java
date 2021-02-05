@@ -84,9 +84,10 @@ public class CoaxSwerveModule extends Wheel {
             wheelTranslation.y,
             190,
             190,
-            0,
+            10,
             0.01
         );
+        // scrubForce = 0;
 
         // add up motor and friction forces, then rotate by wheel angle to get force of module on robot
         force = new Vector2D(driveForce, scrubForce, Type.CARTESIAN)

@@ -29,11 +29,7 @@ public class Main {
             if(!paused){
                 elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9;
                 robot.update(Constants.PHYSICS_DT.getDouble());
-                // robot.update(Constants.PHYSICS_DT.getDouble());
-
             }
-
-
 
             try {
                 Thread.sleep((int) (1000 * Constants.PHYSICS_DT.getDouble() / Constants.SIMSPEED.getDouble()));
@@ -68,7 +64,7 @@ public class Main {
                     // System.out.println("Display looptime: " + 1000 * clock.looptime);
                 }
                 try{
-                    double sleeptime = Math.max(0, Constants.DISPLAY_DT.getDouble() - clock.codetime); //in seconds
+                    double sleeptime = Math.max(0, Constants.DISPLAY_DT.getDouble() / Constants.SIMSPEED.getDouble() - clock.codetime); //in seconds
                     Thread.sleep((int) (sleeptime * 1000)); //in milliseconds
                 }catch(InterruptedException e){
                     e.printStackTrace();
@@ -115,7 +111,7 @@ public class Main {
                 }
 
                 try{
-                    double sleeptime = Math.max(0, Constants.USERCODE_DT.getDouble() - clock.codetime); //in seconds
+                    double sleeptime = Math.max(0, Constants.USERCODE_DT.getDouble() / Constants.SIMSPEED.getDouble() - clock.codetime); //in seconds
                     Thread.sleep((int) (sleeptime * 1000)); //in milliseconds
                 }catch(InterruptedException e){
                     e.printStackTrace();

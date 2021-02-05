@@ -20,7 +20,6 @@ public class Constants{
     public static Constant SWERVE_MOI = new Constant("SWERVE_MOI", 0.1, Type.DOUBLE);
 
     //Build problems
-    public static Constant TURN_ERROR = new Constant("TURN_ERROR", 0.0, Type.DOUBLE); //torque that will be added/subtracted from left/right
 
 
     /** ////////////////////////////////
@@ -38,13 +37,12 @@ public class Constants{
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
      * //////////////////////////////// */  
     public static Constant[] constants = {
+        SIMSPEED,
         PHYSICS_DT,
         USERCODE_DT,
         DISPLAY_DT,
-        TURN_ERROR,
         ROBOT_MASS,
         SWERVE_MOI,
-        WHEEL_RADIUS,
         WHEEL_XDIST,
         WHEEL_YDIST,
         DISPLAY_SCALE,

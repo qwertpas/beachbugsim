@@ -105,10 +105,10 @@ public class GraphicDash extends JPanel{
         }
 
         if(isTracking){
-            xMin -= 0.1;
-            xMax += 0.1;
-            yMin -= 0.1;
-            yMax += 0.1;
+            xMin -= 0.001;
+            xMax += 0.001;
+            yMin -= 0.001;
+            yMax += 0.001;
         }
 
         calcScales();
@@ -157,7 +157,7 @@ public class GraphicDash extends JPanel{
         Printouts.put(label, number);
 
         for(Serie serie : series){
-            if(serie.name == label){
+            if(serie.name.equals(label)){
                 serie.addPoint(Main.elaspedTime, number);
                 return;
             }

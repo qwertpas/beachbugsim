@@ -22,7 +22,7 @@ public class UserCode{
     static GraphicDash speeds = new GraphicDash("speeds", 100, true);
     static GraphicDash angles = new GraphicDash("angles", 100, true);
 
-    static GraphicDash robotSpeeds = new GraphicDash("angles", 100, true);
+    static GraphicDash robotSpeeds = new GraphicDash("robotspeeds", 100, true);
     
 
     static final double offsetX = Constants.WHEEL_XDIST.getDouble();
@@ -43,11 +43,13 @@ public class UserCode{
 
         double heading = Main.robot.robotPos.ang;
 
-        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, 0);
-        Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(2);
+        // Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, 2);
+        Pose2D joystick = new Pose2D(1, 0, Controls.rawX * 6);
+
+        Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(3);
 
 
-        // Pose2D targetRobotSpeeds = new Pose2D(1, 0, 0);
+        // Pose2D targetRobotSpeeds = new Pose2D(1, 0, -1);
 
 
         swerve.move(targetRobotSpeeds);
@@ -68,18 +70,20 @@ public class UserCode{
         // dynamics.putNumber("netTorque", Main.robot.netTorque, Color.GREEN.darker());
 
         for(int i = 0; i < swerve.modules.length; i++){
-            angles.putNumber("targetAngle", swerve.modules[i].targetAngleOptimized, Color.BLUE);
-            angles.putNumber("currentAngle", swerve.modules[i].currentAngle, Color.RED);
+            angles.putNumber(i + "targetAngle", swerve.modules[i].targetAngle, Color.BLUE);
+            angles.putNumber(i + "currentAngle", swerve.modules[i].currentAngle, Color.RED);
 
-            speeds.putNumber("targetSpeed", swerve.modules[i].targetDriveSpeed, Color.BLUE);
-            speeds.putNumber("currentSpeed", swerve.modules[i].currentDriveSpeed, Color.RED);
+            speeds.putNumber(i + "targetSpeed", swerve.modules[i].targetDriveSpeed, Color.BLUE);
+            speeds.putNumber(i + "currentSpeed", swerve.modules[i].currentDriveSpeed, Color.RED);
         }
 
+        Vector2D robotCentricVel = Main.robot.robotVel.rotate(-heading);
+
         robotSpeeds.putNumber("vx target", targetRobotSpeeds.x, Color.BLUE);  
-        robotSpeeds.putNumber("vx curr", Main.robot.robotVel.x, Color.RED);  
+        robotSpeeds.putNumber("vx curr", robotCentricVel.x, Color.RED);  
 
         robotSpeeds.putNumber("vy target", targetRobotSpeeds.y, Color.BLUE);  
-        robotSpeeds.putNumber("vy curr", Main.robot.robotVel.y, Color.RED);  
+        robotSpeeds.putNumber("vy curr", robotCentricVel.y, Color.RED);  
 
         robotSpeeds.putNumber("ang target", targetRobotSpeeds.ang, Color.BLUE);  
         robotSpeeds.putNumber("ang curr", Main.robot.robotVel.ang, Color.RED);  

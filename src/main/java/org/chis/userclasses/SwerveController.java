@@ -1,5 +1,6 @@
 package org.chis.userclasses;
 
+import org.chis.sim.Constants;
 import org.chis.sim.Main;
 import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
@@ -15,6 +16,7 @@ public class SwerveController {
     static final double TURN_RATIO = 12.8;
     static final double DRIVE_RATIO = 6.86;
     static final double WHEEL_RADIUS = Util.inchesToMeters(2);
+    static final double DT = Constants.USERCODE_DT.getDouble();
 
     public SwerveController(Module... modules){
         this.modules = modules;
@@ -30,7 +32,8 @@ public class SwerveController {
         Pose2D placement;
         int turnMotorID, driveMotorID;
 
-        double targetAngle, targetAngleOptimized, targetDriveSpeed;
+        Vector2D targetSpeedVector;
+        double targetAngle, targetDriveSpeed;
         boolean reversed;
 
         double currentAngle, currentDriveSpeed;
@@ -45,11 +48,12 @@ public class SwerveController {
             this.driveMotorID = driveMotorID;
             this.placement = placement;
 
-            turnPID.setkP(3);
-            turnPID.setkI(4, 0.5, 0.1);
+            turnPID.setkP(2);
+            turnPID.setkI(15, 0.5, 0.5);
+            turnPID.setkD(0.1);
 
-            drivePID.setkP(0.1);
-            drivePID.setkI(2, 1, 1);
+            drivePID.setkP(1);
+            // drivePID.setkI(2, 1, 0.5);
         }
 
         public void move(Pose2D robotSpeeds){
@@ -57,22 +61,28 @@ public class SwerveController {
             double angVelo = robotSpeeds.ang;
 
             // ask chis for vector math derivation
-            targetAngle = linVelo.add(placement.rotate90().scalarMult(angVelo)).getAngle();
-            targetDriveSpeed = linVelo.getMagnitude() + placement.getMagnitude() * angVelo;
+            targetSpeedVector = linVelo.add(placement.scalarMult(angVelo).rotate90());
             
             currentAngle = getAngle();
             currentDriveSpeed = getDriveSpeed();
 
-            targetAngleOptimized = calcClosestModuleAngle(currentAngle, targetAngle);
-            if(reversed) targetDriveSpeed *= -1;
+            targetAngle = targetSpeedVector.getAngle();
+            targetDriveSpeed = targetSpeedVector.getMagnitude();
+            if(Math.abs(targetDriveSpeed) < 0.1){
+                targetAngle = calcClosestModuleAngle(currentAngle, targetAngle);
+                if(reversed) targetDriveSpeed *= -1;
+            }
 
-            turnPower = turnPID.loop(currentAngle, targetAngleOptimized);
-            drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed) + targetDriveSpeed * 0.45;
+            turnPower = turnPID.loop(currentAngle, targetAngle, DT);
+            drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed, DT) + targetDriveSpeed * 0.23;
 
             Main.robot.motors.get(turnMotorID).setPower(turnPower);
             Main.robot.motors.get(driveMotorID).setPower(drivePower);
         }
-    
+        
+        // TODO: make one that calcs closest module angle without reversing (360º) so that it can optimize while speed > threshold
+        // the reversing type using 180º should only work at low speeds.
+
         private double calcClosestModuleAngle(double currentAngle, double targetAngle){
             double differencePi = (currentAngle - targetAngle) % Math.PI; //angle error from (-180, 180)
     
