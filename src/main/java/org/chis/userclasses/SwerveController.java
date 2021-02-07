@@ -6,7 +6,6 @@ import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
 import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
-import org.chis.sim.math.Vector2D.Type;
 
 public class SwerveController {
 

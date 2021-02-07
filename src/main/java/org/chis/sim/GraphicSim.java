@@ -207,7 +207,7 @@ public class GraphicSim extends JPanel {
 
 		g2d.translate(DISP_SCALE * offset.x, DISP_SCALE * offset.y);
 		g2d.scale(scale, -scale);
-		g2d.rotate(offset.ang);
+		g2d.rotate(-offset.ang);
 
 
 		g2d.drawImage(img, -img.getWidth()/2, -img.getHeight()/2, this);

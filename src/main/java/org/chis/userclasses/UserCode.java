@@ -23,10 +23,10 @@ public class UserCode{
     static final double offsetY = Constants.WHEEL_YDIST.getDouble();
 
     static SwerveController swerve = new SwerveController(
-        new Module(1, 0, new Pose2D(+offsetX, +offsetY, 0)),
-        new Module(3, 2, new Pose2D(-offsetX, +offsetY, 0)),
-        new Module(5, 4, new Pose2D(-offsetX, -offsetY, 0)),
-        new Module(7, 6, new Pose2D(+offsetX, -offsetY, 0))
+        new Module(1, 0, new Pose2D(+offsetX, +offsetY, Constants.WHEELANG0.getDouble())),
+        new Module(3, 2, new Pose2D(-offsetX, +offsetY, Constants.WHEELANG1.getDouble())),
+        new Module(5, 4, new Pose2D(-offsetX, -offsetY, Constants.WHEELANG2.getDouble())),
+        new Module(7, 6, new Pose2D(+offsetX, -offsetY, Constants.WHEELANG3.getDouble()))
     );
 
     public static void initialize(){ //this function is run once when the robot starts
@@ -39,7 +39,7 @@ public class UserCode{
         //DRIVE CODE
         double heading = Main.robot.robotPos.ang;
 
-        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -6);
+        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -0);
 
         Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(4);
 

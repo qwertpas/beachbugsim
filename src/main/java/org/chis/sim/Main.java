@@ -27,7 +27,7 @@ public class Main {
         while (true) {
 
             if(!paused){
-                elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9;
+                elaspedTime = (System.nanoTime() - GraphicInput.totalTimePaused - startTime) * 1e-9 * Constants.SIMSPEED.getDouble();
                 robot.update(Constants.PHYSICS_DT.getDouble());
             }
 

@@ -41,7 +41,7 @@ public class Robot{
 
         wheels = new Wheel[] {
             new CoaxSwerveModule(
-                new Pose2D(wheelX, wheelY, 0), 
+                new Pose2D(wheelX, wheelY, Constants.WHEELANG0.getDouble()), 
                 Constants.WHEEL_RADIUS.getDouble(), 
                 motors.get(0), 
                 motors.get(1), 
@@ -50,7 +50,7 @@ public class Robot{
                 driveRatio
             ),
             new CoaxSwerveModule(
-                new Pose2D(-wheelX, wheelY, 0), 
+                new Pose2D(-wheelX, wheelY, Constants.WHEELANG1.getDouble()), 
                 Constants.WHEEL_RADIUS.getDouble(), 
                 motors.get(2), 
                 motors.get(3), 
@@ -59,7 +59,7 @@ public class Robot{
                 driveRatio
             ),
             new CoaxSwerveModule(
-                new Pose2D(-wheelX, -wheelY, 0), 
+                new Pose2D(-wheelX, -wheelY, Constants.WHEELANG2.getDouble()), 
                 Constants.WHEEL_RADIUS.getDouble(), 
                 motors.get(4), 
                 motors.get(5), 
@@ -68,7 +68,7 @@ public class Robot{
                 driveRatio
             ),
             new CoaxSwerveModule(
-                new Pose2D(wheelX, -wheelY, 0), 
+                new Pose2D(wheelX, -wheelY, Constants.WHEELANG3.getDouble()), 
                 Constants.WHEEL_RADIUS.getDouble(), 
                 motors.get(6), 
                 motors.get(7), 
