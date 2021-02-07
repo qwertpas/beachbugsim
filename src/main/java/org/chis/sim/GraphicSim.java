@@ -139,8 +139,8 @@ public class GraphicSim extends JPanel {
 		double robotWidthReal = 0;
 		double robotLengthReal = 0;
 		for(Wheel wheel : Main.robot.wheels){
-			double xDist = 2 * (Math.abs(wheel.placement.x) + 2 * wheel.wheelRadius);
-			double yDist = 2 * (Math.abs(wheel.placement.y) + 2 * wheel.wheelRadius);
+			double xDist = 2 * (Math.abs(wheel.placement.x) + wheel.wheelRadius);
+			double yDist = 2 * (Math.abs(wheel.placement.y) + wheel.wheelRadius);
 
 			if(xDist > robotLengthReal){
 				robotLengthReal = xDist;
@@ -166,8 +166,8 @@ public class GraphicSim extends JPanel {
 				case CoaxSwerveModule:
 					CoaxSwerveModule coax = (CoaxSwerveModule) wheel;
 
-					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 3, g2d);
-					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2.8, g2d);
+					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 2, g2d);
+					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2, g2d);
 
 					drawForce(coax.placement, new Vector2D(coax.driveForce, coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
 					break;
