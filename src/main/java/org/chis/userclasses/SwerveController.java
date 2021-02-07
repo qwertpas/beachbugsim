@@ -52,13 +52,20 @@ public class SwerveController {
             turnPID.setkI(15, 0.5, 0.5);
             turnPID.setkD(0.1);
 
-            drivePID.setkP(1);
-            // drivePID.setkI(2, 1, 0.5);
+            drivePID.setkP(0.1);
+            drivePID.setkI(1, 1, 0.5);
+            drivePID.setkD(0.001);
         }
 
         public void move(Pose2D robotSpeeds){
             Vector2D linVelo = robotSpeeds.getVector2D();
             double angVelo = robotSpeeds.ang;
+
+            if(linVelo.getMagnitude() < 0.1 && Math.abs(angVelo) < 0.1){
+                Main.robot.motors.get(turnMotorID).setPower(0);
+                Main.robot.motors.get(driveMotorID).setPower(0);
+                return;
+            }
 
             // ask chis for vector math derivation
             targetSpeedVector = linVelo.add(placement.scalarMult(angVelo).rotate90());
@@ -68,10 +75,21 @@ public class SwerveController {
 
             targetAngle = targetSpeedVector.getAngle();
             targetDriveSpeed = targetSpeedVector.getMagnitude();
-            if(Math.abs(targetDriveSpeed) < 0.1){
+            
+            
+            if(Math.abs(targetDriveSpeed) < 0.5){
                 targetAngle = calcClosestModuleAngle(currentAngle, targetAngle);
                 if(reversed) targetDriveSpeed *= -1;
+            }else{
+                if(reversed){
+                    targetAngle = calcClosestModuleAngle360(currentAngle, targetAngle + Math.PI);
+                    targetDriveSpeed *= -1;
+                }else{
+                    targetAngle = calcClosestModuleAngle360(currentAngle, targetAngle);
+                }
             }
+
+            // targetAngle = calcClosestModuleAngle360(currentAngle, targetAngle);
 
             turnPower = turnPID.loop(currentAngle, targetAngle, DT);
             drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed, DT) + targetDriveSpeed * 0.23;
@@ -80,8 +98,6 @@ public class SwerveController {
             Main.robot.motors.get(driveMotorID).setPower(drivePower);
         }
         
-        // TODO: make one that calcs closest module angle without reversing (360º) so that it can optimize while speed > threshold
-        // the reversing type using 180º should only work at low speeds.
 
         private double calcClosestModuleAngle(double currentAngle, double targetAngle){
             double differencePi = (currentAngle - targetAngle) % Math.PI; //angle error from (-180, 180)
@@ -99,9 +115,15 @@ public class SwerveController {
             return closestAngle;
         }
 
+        private double calcClosestModuleAngle360(double currentAngle, double targetAngle){
+            double diffNormalized = Util.normalizeAngle(currentAngle - targetAngle, Math.PI); //angle error from (-PI, PI)
+
+            return currentAngle - diffNormalized;
+        }
+
         private double getAngle(){
             double encoderPos = Main.robot.motors.get(turnMotorID).getEncoderPosition();
-            return encoderPos / TICKS_PER_REV / TURN_RATIO * 2 * Math.PI;
+            return encoderPos / TICKS_PER_REV / TURN_RATIO * 2 * Math.PI + placement.ang;
         }
 
         private double getDriveSpeed(){
@@ -111,25 +133,8 @@ public class SwerveController {
     }
 
     public static void main(String[] args) {
-
-        double vx = 2;
-        double vy = 0;
-
-        double px = -2;
-        double py = -1;
-
-        double angVelo = 0.1;
-
-        double wheelangleX = vx - py * angVelo;
-        double wheelangleY = vy + px * angVelo;
-
-        double angle = Math.atan2(wheelangleY, wheelangleX);
-
-        Vector2D placement = new Vector2D(-2, -1, Type.CARTESIAN);
-        Vector2D velo = new Vector2D(2, 0, Type.CARTESIAN);
-        double angVec = velo.add(placement.rotate90().scalarMult(angVelo)).getAngle();
-
-        System.out.println(angle);
-        System.out.println(angVec);
+        for(int i = -720; i < 720; i += 10){
+            System.out.println(i + " : " + Util.normalizeAngle(i, 180));
+        }
     }
 }

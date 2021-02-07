@@ -91,7 +91,7 @@ public class Main {
             Controls.init();
             UserCode.initialize();
 
-            Printouts printouts = new Printouts();
+            new Printouts();
 
             LooptimeMonitor clock = new LooptimeMonitor();
 
@@ -102,7 +102,6 @@ public class Main {
                     GraphicSim.clearDrawing();
                     UserCode.execute();
                     Controls.updateControls();
-                    printouts.repaint();
                     GraphicDash.paintAll();
 
                     clock.end();

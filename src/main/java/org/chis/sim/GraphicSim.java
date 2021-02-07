@@ -32,6 +32,7 @@ public class GraphicSim extends JPanel {
 	static BufferedImage diffModuleImage;
 	static BufferedImage omniWheelImage;
 	static BufferedImage wheelImage;
+	static BufferedImage fieldImage;
 
 	static int screenHeight, screenWidth;
 	static int windowWidth, windowHeight;
@@ -39,9 +40,9 @@ public class GraphicSim extends JPanel {
 
 	static double DISP_SCALE;
 
-	static AffineTransform robotTransform;
-
 	public static String imagesDirectory = "./src/images/";
+	public static String fieldsDirectory = "./src/images/fields";
+
 
 	public static List<Serie> userPointsRobot = Collections.synchronizedList(new ArrayList<Serie>());
 	public static List<Serie> userPointsGlobal = Collections.synchronizedList(new ArrayList<Serie>());
@@ -55,14 +56,16 @@ public class GraphicSim extends JPanel {
 			diffModuleImage = ImageIO.read(new File(imagesDirectory, "diffModule.png"));
 			omniWheelImage = ImageIO.read(new File(imagesDirectory, "omniWheel.png"));
 			wheelImage = ImageIO.read(new File(imagesDirectory, "wheel.png"));
+
+			fieldImage = ImageIO.read(new File(fieldsDirectory, Constants.FIELD.getString() + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		frame = new JFrame("Robot Sim");
 		sim = new GraphicSim();
 		frame.add(sim);
-		frame.setSize(screenWidth - 200, screenHeight);
-		frame.setLocation(200, 0);
+		frame.setSize(screenWidth - 150, screenHeight - 200);
+		frame.setLocation(200, 200);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		updateConstants();
@@ -70,6 +73,12 @@ public class GraphicSim extends JPanel {
 
 	public static void updateConstants(){
 		DISP_SCALE = Constants.DISPLAY_SCALE.getDouble();
+
+		try {
+			fieldImage = ImageIO.read(new File(fieldsDirectory, Constants.FIELD.getString() + ".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
     @Override
@@ -84,6 +93,8 @@ public class GraphicSim extends JPanel {
 		//center the grid and flip y so it is up (default y is down)
 		g2d.translate(windowWidth/2, windowHeight/2);
 		g2d.scale(1, -1);
+
+		drawCentered(fieldImage, new Pose2D(), Util.feetToMeters(30), g2d);
 
 		//draw vertical lines
 		for(int ix = 0; ix < windowWidth/2; ix += (int) DISP_SCALE){
@@ -124,7 +135,6 @@ public class GraphicSim extends JPanel {
 		int[] robotPixelPos = meterToPixel(Main.robot.robotPos.x, Main.robot.robotPos.y, true);
 		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
 		g2d.rotate(Main.robot.robotPos.ang);
-		robotTransform = g2d.getTransform();
 
 		double robotWidthReal = 0;
 		double robotLengthReal = 0;
@@ -159,7 +169,7 @@ public class GraphicSim extends JPanel {
 					drawCentered(coaxModuleImage, coax.placement, coax.wheelRadius * 3, g2d);
 					drawCentered(wheelImage, coax.placement.rotateAng(coax.wheelTurnIntegrator.pos), coax.wheelRadius * 2.8, g2d);
 
-					drawForce(coax.placement, new Vector2D(coax.driveForce, coax.placement.ang + coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
+					drawForce(coax.placement, new Vector2D(coax.driveForce, coax.wheelTurnIntegrator.pos, Type.POLAR), 0.2, g2d);
 					break;
 				case DiffSwerveModule:
 					drawCentered(coaxModuleImage, wheel.placement, wheel.wheelRadius * 2, g2d);
@@ -191,25 +201,29 @@ public class GraphicSim extends JPanel {
 	}
 
 	public void drawCentered(BufferedImage img, Pose2D offset, double realWidth, Graphics2D g2d){
+		AffineTransform prevTranform = g2d.getTransform();
 		int displayWidth = (int) (DISP_SCALE * realWidth); //in pixels
 		double scale = (double) displayWidth / img.getWidth();
 
 		g2d.translate(DISP_SCALE * offset.x, DISP_SCALE * offset.y);
-		g2d.scale(scale, scale);
+		g2d.scale(scale, -scale);
 		g2d.rotate(offset.ang);
 
-		g2d.drawImage(img, -img.getWidth()/2, -img.getWidth()/2, this);
 
-		g2d.setTransform(robotTransform); //going back to robot centered
+		g2d.drawImage(img, -img.getWidth()/2, -img.getHeight()/2, this);
+
+		g2d.setTransform(prevTranform); //going back to previous transform
 	}
 
 	public void drawForce(Pose2D offset, Vector2D force, double scale, Graphics2D g2d){
+		AffineTransform prevTranform = g2d.getTransform();
+
 		g2d.translate(DISP_SCALE * offset.x, DISP_SCALE * offset.y);
 
 		g2d.rotate(offset.ang);
 		g2d.drawLine(0, 0, (int) (force.x * scale), (int) (force.y * scale));
 		
-		g2d.setTransform(robotTransform); //going back to robot centered
+		g2d.setTransform(prevTranform); //going back to previous transform
 	}
 
 	
@@ -240,10 +254,6 @@ public class GraphicSim extends JPanel {
 	public static void clearDrawing(){
 		userPointsGlobal.clear();
 		userPointsRobot.clear();
-	}
-
-	public static class PathPlotter{
-		
 	}
 
 

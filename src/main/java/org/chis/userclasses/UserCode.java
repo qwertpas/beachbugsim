@@ -14,14 +14,8 @@ public class UserCode{
 
     static ArrayList<Vector2D> trail = new ArrayList<Vector2D>();
 
-    // static GraphicDash dynamics = new GraphicDash("dynamics", 100, true);
-    // static GraphicDash state = new GraphicDash("state", 100, true);
-
-    // static GraphicDash module0angle = new GraphicDash("module0angle", 100, true);
-    // static GraphicDash module0drive = new GraphicDash("module0drive", 100, true);
-    static GraphicDash speeds = new GraphicDash("speeds", 100, true);
-    static GraphicDash angles = new GraphicDash("angles", 100, true);
-
+    static GraphicDash moduleSpeeds = new GraphicDash("moduleSpeeds", 100, true);
+    static GraphicDash moduleAngles = new GraphicDash("moduleAngles", 100, true);
     static GraphicDash robotSpeeds = new GraphicDash("robotspeeds", 100, true);
     
 
@@ -36,45 +30,34 @@ public class UserCode{
     );
 
     public static void initialize(){ //this function is run once when the robot starts
-        
+        trail.clear();
     }
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
 
+
+        //DRIVE CODE
         double heading = Main.robot.robotPos.ang;
 
-        // Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, 2);
-        Pose2D joystick = new Pose2D(1, 0, Controls.rawX * 6);
+        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -6);
 
-        Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(3);
-
-
-        // Pose2D targetRobotSpeeds = new Pose2D(1, 0, -1);
-
+        Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(4);
 
         swerve.move(targetRobotSpeeds);
 
-        // Main.robot.motors.get(1).setPower(1);
-        // Main.robot.motors.get(3).setPower(1);
-        // Main.robot.motors.get(5).setPower(1);
-        // Main.robot.motors.get(7).setPower(1);
-
-        // Main.robot.motors.get(1).setPower(0.4);
 
 
+
+        // DEBUG
         trail.add(Main.robot.robotPos.getVector2D());
         GraphicSim.addDrawingGlobal(trail, Color.GREEN.darker());
 
-        //printing values in separate window
-        // dynamics.putNumber("netForceMag", Main.robot.netForce.getMagnitude(), Color.RED);
-        // dynamics.putNumber("netTorque", Main.robot.netTorque, Color.GREEN.darker());
-
         for(int i = 0; i < swerve.modules.length; i++){
-            angles.putNumber(i + "targetAngle", swerve.modules[i].targetAngle, Color.BLUE);
-            angles.putNumber(i + "currentAngle", swerve.modules[i].currentAngle, Color.RED);
+            moduleAngles.putNumber(i + "targetAngle", swerve.modules[i].targetAngle, Color.BLUE);
+            moduleAngles.putNumber(i + "currentAngle", swerve.modules[i].currentAngle, Color.RED);
 
-            speeds.putNumber(i + "targetSpeed", swerve.modules[i].targetDriveSpeed, Color.BLUE);
-            speeds.putNumber(i + "currentSpeed", swerve.modules[i].currentDriveSpeed, Color.RED);
+            moduleSpeeds.putNumber(i + "targetSpeed", swerve.modules[i].targetDriveSpeed, Color.BLUE);
+            moduleSpeeds.putNumber(i + "currentSpeed", swerve.modules[i].currentDriveSpeed, Color.RED);
         }
 
         Vector2D robotCentricVel = Main.robot.robotVel.rotate(-heading);
@@ -87,12 +70,6 @@ public class UserCode{
 
         robotSpeeds.putNumber("ang target", targetRobotSpeeds.ang, Color.BLUE);  
         robotSpeeds.putNumber("ang curr", Main.robot.robotVel.ang, Color.RED);  
-
-        Printouts.put("x", Main.robot.robotPos.x);
-        Printouts.put("y", Main.robot.robotPos.y);
-        Printouts.put("Heading", Main.robot.robotPos.ang);
-    
-
     }
 
     public static double encoderToDist(double encoder){

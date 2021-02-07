@@ -28,12 +28,12 @@ public class GraphicDash extends JPanel{
         for(GraphicDash graphicDash : graphicDashs){
             graphicDash.reset();
         }
+        paintAll();
     }
 
 
     // Instance functions and variables, for each window graph separately
     JFrame frame;
-    Dimension frameSize = new Dimension(300, 300);
     boolean isTracking;
 
     ArrayList<Serie> series = new ArrayList<Serie>();
@@ -43,9 +43,7 @@ public class GraphicDash extends JPanel{
 
         frame = new JFrame(name);
 		frame.add(this);
-        frame.setSize(frameSize);
-        frame.setLocation((int) (GraphicSim.screenWidth - Util.posModulo((frameSize.getWidth() * (graphicDashs.size() + 2)), GraphicSim.screenWidth)), 0);
-		frame.setVisible(true);
+        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         calcScales();
@@ -53,9 +51,18 @@ public class GraphicDash extends JPanel{
         for(Serie serie : series){
             serie.maxLength = maxPoints;
         }
-        
-        graphicDashs.add(this);
 
+        graphicDashs.add(this);
+        Dimension frameSize = new Dimension((GraphicSim.screenWidth - 150 - 300) / (graphicDashs.size()), 200);
+        for(int i = 0; i < graphicDashs.size(); i++){
+            graphicDashs.get(i).frame.setSize(frameSize);
+            graphicDashs.get(i).frame.setLocation(150 + i * frameSize.width, 0);
+        }
+
+        // frame.setSize(200,200);
+
+
+        
         System.out.println("New GraphicDash: " + name);
     }
 

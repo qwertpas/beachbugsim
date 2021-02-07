@@ -3,6 +3,7 @@ package org.chis.sim;
 import javax.swing.*;
 
 import org.chis.sim.Constants.Constant;
+import org.chis.userclasses.UserCode;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,28 +14,26 @@ public class GraphicInput extends JFrame implements ActionListener {
 
     static JPanel panel = new JPanel();
     JScrollPane scrollPane = new JScrollPane(panel);
-    static JButton buttonSave = new JButton("Save");
     static JButton buttonPause = new JButton("Pause");
-    static JButton buttonReset = new JButton("Reset");
+    static JButton buttonReset = new JButton("Save & Reset");
     
     public GraphicInput() {
         super("Input");
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initComponents();
 
         int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-        setSize(200, screenHeight);
+        setSize(150, screenHeight);
     }
 
     private void initComponents() {
         add(scrollPane);
 
-        panel.add(buttonSave);
         panel.add(buttonPause);
         panel.add(buttonReset);
         
-        buttonSave.addActionListener(this);
         buttonPause.addActionListener(this);
         buttonReset.addActionListener(this);
 
@@ -49,7 +48,18 @@ public class GraphicInput extends JFrame implements ActionListener {
     
     public void actionPerformed(ActionEvent event) {
 
-        if(event.getSource() == buttonSave){
+        if(event.getSource() == buttonPause){
+            if(Main.paused){
+                if(Constants.checkTypes()){
+                    resume();
+                }
+            }else{
+                pause();
+            }
+        }
+
+        if(event.getSource() == buttonReset){
+
             for(Constant constant : Constants.constants){
                 Object obj = constant.field.getText();
                 constant.setValue(obj);
@@ -62,21 +72,12 @@ public class GraphicInput extends JFrame implements ActionListener {
                 buttonPause.setText("Resume");
                 System.out.println("Paused: Input type error");
             }
-        }
 
-        if(event.getSource() == buttonPause){
-            if(Main.paused){
-                if(Constants.checkTypes()){
-                    resume();
-                }
-            }else{
-                pause();
-            }
-        }
-
-        if(event.getSource() == buttonReset){
             Main.robot.init();
+            UserCode.initialize();
             GraphicDash.resetAll();
+            Printouts.clear();
+            GraphicSim.clearDrawing();
             GraphicSim.sim.repaint();
             System.out.println("Resetted");
             Main.startTime = System.nanoTime();
@@ -92,7 +93,6 @@ public class GraphicInput extends JFrame implements ActionListener {
         Main.paused = true;
         lastTimePaused = System.nanoTime();
         buttonPause.setText("Resume");
-        buttonSave.setEnabled(true);
         System.out.println("Paused");
     }
 
@@ -103,7 +103,6 @@ public class GraphicInput extends JFrame implements ActionListener {
         totalTimePaused += System.nanoTime() - lastTimePaused;
 
         buttonPause.setText("Pause");
-        buttonSave.setEnabled(false);
         System.out.println("Resume");
     }
     

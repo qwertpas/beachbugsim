@@ -26,17 +26,29 @@ public class Constants{
      * SIMULATOR CONFIG
      * //////////////////////////////// */  
     public static Constant CONTROLLER_INDEX = new Constant("Controller_INDEX", 0, Type.INT); //which joystick?
-    public static Constant DISPLAY_SCALE = new Constant("DISPLAY_SCALE", 75, Type.DOUBLE); //in pixels per meter
+    public static Constant DISPLAY_SCALE = new Constant("DISPLAY_SCALE", 140, Type.DOUBLE); //in pixels per meter
     public static Constant PHYSICS_DT = new Constant("PHYSICS_DT", 0.001, Type.DOUBLE); //in seconds per update
     public static Constant USERCODE_DT = new Constant("USERCODE_DT", 0.02, Type.DOUBLE); //in seconds per update
     public static Constant DISPLAY_DT = new Constant("DISPLAY_DT", 0.015, Type.DOUBLE); //frames per second for display updates
     public static Constant SIMSPEED = new Constant("SIMSPEED", 1, Type.DOUBLE); //simulator speed (1 being normal, 2 being fast)
+
+    /** ////////////////////////////////
+     * INITIAL CONDITIONS
+     * //////////////////////////////// */  
+     public static Constant FIELD = new Constant("FIELD", "barrel", Type.STRING); //what field image to use
+     public static Constant INITX = new Constant("INITX", 0, Type.DOUBLE); 
+     public static Constant INITY = new Constant("INITY", 0, Type.DOUBLE); 
+     public static Constant INITANG = new Constant("INITANG", 0, Type.DOUBLE);
 
 
     /** ////////////////////////////////
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
      * //////////////////////////////// */  
     public static Constant[] constants = {
+        FIELD,
+        INITX,
+        INITY,
+        INITANG,
         SIMSPEED,
         PHYSICS_DT,
         USERCODE_DT,

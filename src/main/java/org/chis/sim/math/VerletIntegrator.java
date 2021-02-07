@@ -24,6 +24,8 @@ public class VerletIntegrator {
         // pos_prev = pos;
         // pos = pos_next;
         // dt_prev = dt;
+
+        // if accel makes vel go past zero, then just make vel 0 to avoid friction vibrations
         if(Math.signum(vel + acc * dt) != Math.signum(vel) && vel != 0){
             vel = 0;
         }else{

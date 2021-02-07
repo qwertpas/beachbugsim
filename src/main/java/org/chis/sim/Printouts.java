@@ -3,26 +3,33 @@ package org.chis.sim;
 import java.util.ArrayList;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-public class Printouts extends JPanel{
+public class Printouts extends JFrame{
 
+    private static JPanel panel = new JPanel();
 
-    private static ArrayList<String> prints = new ArrayList<String>();
-    private JFrame frame;
-    private Dimension frameSize = new Dimension(300, 300);
-
+    private static ArrayList<JLabel> labels = new ArrayList<JLabel>();
 
     public Printouts(){
-        frame = new JFrame("Printouts");
-		frame.add(this);
-        frame.setSize(frameSize);
-        frame.setLocation((int) (GraphicSim.screenWidth - frameSize.getWidth()), 0);
-		frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super("Printouts");
+        add(new JScrollPane(panel));
+        
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Dimension frameSize = new Dimension(300, 200);
+
+        setSize(frameSize);
+        setLocation((int) (GraphicSim.screenWidth - frameSize.getWidth()), 0);
+        setVisible(true);
+    }
+
+    public static void clear(){
+        labels.clear();
+        panel.removeAll();
+        panel.repaint();
     }
     
     /**
@@ -31,27 +38,17 @@ public class Printouts extends JPanel{
      * @param number The number you want to print
      */
     public static void put(String text, Object object){
-        for(int i = 0; i < prints.size(); i++){
-            if(prints.get(i).startsWith(text)){
-                prints.set(i, text + ": " + object);
+        for(int i = 0; i < labels.size(); i++){
+            if(labels.get(i).getText().startsWith(text)){
+                labels.get(i).setText(text + ": " + object);
                 return;
             }
         }
-        prints.add(text + ": " + object);
+        JLabel newLabel = new JLabel(text + ": " + object);
+        labels.add(newLabel);
+        panel.add(newLabel);
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        int lineNumber = 1;
-        for(String str : prints){
-            g.drawString(str, 20, 20 * lineNumber);
-            lineNumber++;
-        }
-    }
-
-
-
+    //warning if isn't here, idk why
     private static final long serialVersionUID = 1L;
-
 }

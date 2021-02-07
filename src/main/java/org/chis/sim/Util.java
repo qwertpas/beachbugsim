@@ -46,6 +46,10 @@ public class Util {
         return feet / 12.0;
     }
 
+    public static double feetToMeters(double feet) {
+        return feet * 0.3048;
+    }
+
     public static double roundHundreths(double input) {
         return Double.parseDouble(new DecimalFormat("#.##").format(input));
     }
@@ -357,6 +361,22 @@ public class Util {
         } else {
             return val;
         }
+    }
+
+    /**
+     * forces angle between -range and range
+     */
+    public static double normalizeAngle(double angle, double range){
+        // reduce the angle  
+        angle =  angle % (2 * range); 
+
+        // force it to be the positive remainder, so that 0 <= angle < 360  
+        angle = (angle + (2 * range)) % (2 * range);  
+
+        // force into the minimum absolute value residue class, so that -180 < angle <= 180  
+        if (angle > range) angle -= (2 * range); 
+
+        return angle;
     }
 
     public static class LooptimeMonitor {
