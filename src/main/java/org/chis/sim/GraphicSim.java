@@ -3,6 +3,7 @@ package org.chis.sim;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
@@ -46,6 +47,9 @@ public class GraphicSim extends JPanel {
 
 	public static List<Serie> userPointsRobot = Collections.synchronizedList(new ArrayList<Serie>());
 	public static List<Serie> userPointsGlobal = Collections.synchronizedList(new ArrayList<Serie>());
+
+	public static Pose2D odoPose;
+	public static boolean drawOdometry = false;
 
 	public static void init(){
 		screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -129,12 +133,11 @@ public class GraphicSim extends JPanel {
 				}
 			}
 		}
+
+	
 			
 			
-		//robot transform in pixels
-		int[] robotPixelPos = meterToPixel(Main.robot.robotPos.x, Main.robot.robotPos.y, true);
-		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
-		g2d.rotate(Main.robot.robotPos.ang);
+
 
 		double robotWidthReal = 0;
 		double robotLengthReal = 0;
@@ -150,15 +153,32 @@ public class GraphicSim extends JPanel {
 			}
 		}
 
-
 		int robotWidthDisplay = (int) (DISP_SCALE * robotWidthReal); //width of robot in pixels
 		int robotLengthDisplay = (int) (DISP_SCALE * robotLengthReal); //length of robot in pixels
+
+		if(drawOdometry){
+			g.setColor(Color.ORANGE);
+			g2d.setStroke(new BasicStroke(5));
+			int[] odoPixelPos = meterToPixel(odoPose.x, odoPose.y, true);
+
+			AffineTransform prev = g2d.getTransform();
+			g2d.translate(odoPixelPos[0], odoPixelPos[1]);
+			g2d.rotate(odoPose.ang);
+			g2d.drawRect(-robotLengthDisplay / 2, -robotWidthDisplay / 2, robotLengthDisplay, robotWidthDisplay);
+			g2d.setTransform(prev);
+		}
+
+		//robot transform in pixels
+		int[] robotPixelPos = meterToPixel(Main.robot.robotPos.x, Main.robot.robotPos.y, true);
+		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
+		g2d.rotate(Main.robot.robotPos.ang);
 
 		g.setColor(Color.BLACK);
 		g2d.fillRect(-robotLengthDisplay / 2, -robotWidthDisplay / 2, robotLengthDisplay, robotWidthDisplay);
 
 		g.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(robotLengthDisplay/2 - 10, -5, 10, 10);
+
 		
 		g.setColor(Color.RED);
 		for(Wheel wheel : Main.robot.wheels){
@@ -221,6 +241,7 @@ public class GraphicSim extends JPanel {
 		g2d.translate(DISP_SCALE * offset.x, DISP_SCALE * offset.y);
 
 		g2d.rotate(offset.ang);
+		g2d.setStroke(new BasicStroke(3));
 		g2d.drawLine(0, 0, (int) (force.x * scale), (int) (force.y * scale));
 		
 		g2d.setTransform(prevTranform); //going back to previous transform
@@ -249,6 +270,14 @@ public class GraphicSim extends JPanel {
 		synchronized(userPointsGlobal){
 			userPointsGlobal.add(new Serie("globalDrawing", color, path));
 		}	
+	}
+
+	public static void updateOdometryDrawing(Pose2D estPose){
+		odoPose = estPose
+			.rotateAll(Constants.INITANG.getDouble())
+			.add(new Vector2D(Constants.INITX.getDouble(), Constants.INITY.getDouble(), Type.CARTESIAN))
+		;
+		drawOdometry = true;
 	}
 	
 	public static void clearDrawing(){

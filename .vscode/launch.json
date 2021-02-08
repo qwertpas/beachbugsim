@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch OdometryLinear",
+            "request": "launch",
+            "mainClass": "org.chis.userclasses.OdometryLinear",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
             "name": "Launch VerletIntegrator",
             "request": "launch",
             "mainClass": "org.chis.sim.math.VerletIntegrator",
