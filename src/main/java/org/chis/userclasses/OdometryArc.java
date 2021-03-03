@@ -5,12 +5,12 @@ import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
 import org.ejml.simple.*;
 
-public class Odometry {
+public class OdometryArc {
     
     Pose2D robotPose;
     Pose2D[] placements;
 
-    public Odometry(Pose2D robotPoseInit, Pose2D ... placements){
+    public OdometryArc(Pose2D robotPoseInit, Pose2D ... placements){
         this.robotPose = robotPoseInit;
         this.placements = placements;
     }
@@ -66,7 +66,7 @@ public class Odometry {
     }
 
     public static void main(String[] args) {
-        Odometry odo = new Odometry(
+        OdometryArc odo = new OdometryArc(
             new Pose2D(+0, +0, +0),
 
             new Pose2D(+1, +1, +0),
@@ -86,8 +86,8 @@ public class Odometry {
 
         odo.update(
             new WheelData(0, 2),
-            new WheelData(-0.002, 2),
-            new WheelData(0.001, 2),
+            new WheelData(0, 1),
+            new WheelData(0.1, 2),
             new WheelData(0.002, 2)
         );
 

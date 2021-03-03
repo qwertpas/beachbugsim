@@ -8,12 +8,11 @@ import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
 import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
-import org.chis.userclasses.OdometryLinear.WheelData;
 
 public class SwerveController {
 
     Module[] modules;
-    OdometryLinear odo;
+    OdometryExp odo;
 
     static final double TICKS_PER_REV = 2048;
     static final double TURN_RATIO = 12.8;
@@ -28,7 +27,8 @@ public class SwerveController {
         for(int moduleIndex = 0; moduleIndex < modules.length; moduleIndex++){
             placements[moduleIndex] = modules[moduleIndex].placement;
         }
-        odo = new OdometryLinear(placements);
+        // odo = new OdometryLinear(placements);
+        odo = new OdometryExp(placements);
     }
 
     public void nyoom(Pose2D robotSpeeds){
@@ -118,7 +118,6 @@ public class SwerveController {
 
             Main.robot.motors.get(turnMotorID).setPower(turnPower);
             Main.robot.motors.get(driveMotorID).setPower(drivePower);
-
         }
         
 

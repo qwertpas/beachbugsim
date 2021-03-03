@@ -1,16 +1,18 @@
+
 package org.chis.userclasses;
 
 import java.util.ArrayList;
 
+import org.chis.sim.Main;
 import org.chis.sim.math.Pose2D;
 import org.ejml.simple.*;
 
-public class OdometryLinear {
+public class OdometryExp {
     public Pose2D robotPose = new Pose2D();
 
     Pose2D[] placements;
 
-    public OdometryLinear(Pose2D ... placements){
+    public OdometryExp(Pose2D ... placements){
         this.placements = placements;
     }
 
@@ -35,7 +37,10 @@ public class OdometryLinear {
         SimpleMatrix x = A.solve(y);
 
         Pose2D robotStep = new Pose2D(x.get(0), x.get(1), x.get(2)).rotateVec(robotPose.ang);
+
         robotPose = robotPose.add(robotStep);
+
+        robotPose.ang = Main.robot.robotPos.ang;
     }
 
     public void update(ArrayList<WheelData> arraylist){
@@ -44,20 +49,8 @@ public class OdometryLinear {
         update(array);
     }
 
-    public static class WheelData{
-        double angle;
-        double dist;
-        public WheelData(double angle, double dist){
-            this.angle = angle;
-            this.dist = dist;
-        }
-        public String toString(){
-            return "ang: " + angle + ", dist: " + dist;
-        }
-    }
-
     public static void main(String[] args) {
-        OdometryLinear odo = new OdometryLinear(
+        OdometryExp odo = new OdometryExp(
             new Pose2D(+1, +1, +0),
             new Pose2D(-1, +1, +0),
             new Pose2D(-1, -1, +0),

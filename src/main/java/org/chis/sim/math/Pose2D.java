@@ -61,6 +61,32 @@ public class Pose2D extends Vector2D {
         return new Pose2D(getVector2D().rotate(radiansToRotate), ang);
     }
 
+    public Pose2D exp(Pose2D twist) {
+        double dx = twist.x;
+        double dy = twist.y;
+        double dtheta = twist.ang;
+    
+        double sinTheta = Math.sin(dtheta);
+        double cosTheta = Math.cos(dtheta);
+    
+        double s;
+        double c;
+        if (Math.abs(dtheta) < 1E-9) {
+          s = 1.0 - 1.0 / 6.0 * dtheta * dtheta;
+          c = 0.5 * dtheta;
+        } else {
+          s = sinTheta / dtheta;
+          c = (1 - cosTheta) / dtheta;
+        }
+        Pose2D step = new Pose2D(
+            dx * s - dy * c,
+            dx * c + dy * s,
+            new Vector2D(cosTheta, sinTheta, Type.CARTESIAN).getAngle()
+        );
+    
+        return this.add(step);
+      }
+
     @Override
     public String toString() {
         return "(" + Util.roundHundreths(x) + ", " + Util.roundHundreths(y) + ", " + Util.roundHundreths(ang) + ")";
