@@ -38,9 +38,9 @@ public class OdometryExp {
 
         Pose2D robotStep = new Pose2D(x.get(0), x.get(1), x.get(2)).rotateVec(robotPose.ang);
 
-        robotPose = robotPose.add(robotStep);
+        robotPose = robotPose.exp(robotStep);
 
-        robotPose.ang = Main.robot.robotPos.ang;
+        // robotPose.ang = Main.robot.robotPos.ang;
     }
 
     public void update(ArrayList<WheelData> arraylist){
@@ -50,44 +50,11 @@ public class OdometryExp {
     }
 
     public static void main(String[] args) {
-        OdometryExp odo = new OdometryExp(
-            new Pose2D(+1, +1, +0),
-            new Pose2D(-1, +1, +0),
-            new Pose2D(-1, -1, +0),
-            new Pose2D(+1, -1, +0)
-        );
+        Pose2D initPose = new Pose2D(0, 0, Math.toRadians(66.782));
+        Pose2D step = new Pose2D(2.56, 0, -Math.toRadians(180 - 138.148));
 
-        odo.update(
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1)
-        );
-        System.out.println(odo.robotPose);
-
-        odo.update(
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1)
-        );
-        System.out.println(odo.robotPose);
-
-        odo.update(
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1)
-        );
-        System.out.println(odo.robotPose);
-
-        odo.update(
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1),
-            new WheelData(0, 1)
-        );
-        System.out.println(odo.robotPose);
+        System.out.println("exp: " + initPose.exp(step));
+        System.out.println("add: " + initPose.add(step));
 
     }
 }

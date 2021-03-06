@@ -34,13 +34,9 @@ public class OdometryArc {
         System.out.println("A: " + A);
         System.out.println("y: " + y);
 
-
-        SimpleMatrix AT = A.transpose();
-        SimpleMatrix x_t = AT.mult(A).solve(AT.mult(y));
         SimpleMatrix x = A.solve(y);
 
         System.out.println("x: " + x);
-        System.out.println("x_t: " + x_t);
 
         Vector2D toTurnCenter = new Vector2D(x.get(0), x.get(1), Type.CARTESIAN);
         double angleMovement = 1 / x.get(2);
