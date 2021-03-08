@@ -71,7 +71,6 @@ public class OdometryArc {
             new Pose2D(+1, -1, +0)
         );
 
-        double toRad = Math.PI / 180;
 
         // odo.update(
         //     new WheelData(7.8 * toRad, 2.724),

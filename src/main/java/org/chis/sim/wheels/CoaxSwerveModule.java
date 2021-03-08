@@ -15,7 +15,7 @@ public class CoaxSwerveModule extends Wheel {
     final double TURN_GR;
     final double ROLL_GR;
 
-    public VerletIntegrator wheelTurnIntegrator = new VerletIntegrator(0, 0, 0, 0.1);
+    public VerletIntegrator wheelTurnIntegrator;
 
     public CoaxSwerveModule(
         Pose2D placement, 
@@ -34,6 +34,7 @@ public class CoaxSwerveModule extends Wheel {
         this.TURN_MOI = TURN_MOI;
         this.TURN_GR = TURN_GR;
         this.ROLL_GR = ROLL_GR;
+        wheelTurnIntegrator = new VerletIntegrator(0, 0, 0, 0);
     }
 
     @Override

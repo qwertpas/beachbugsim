@@ -273,16 +273,14 @@ public class GraphicSim extends JPanel {
 	}
 
 	public static void updateOdometryDrawing(Pose2D estPose){
-		odoPose = estPose
-			.rotateAll(Constants.INITANG.getDouble())
-			.add(new Vector2D(Constants.INITX.getDouble(), Constants.INITY.getDouble(), Type.CARTESIAN))
-		;
+		odoPose = estPose;
 		drawOdometry = true;
 	}
 	
 	public static void clearDrawing(){
 		userPointsGlobal.clear();
 		userPointsRobot.clear();
+		odoPose = Main.robot.robotPos;
 	}
 
 

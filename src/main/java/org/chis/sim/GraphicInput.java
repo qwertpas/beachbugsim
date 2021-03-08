@@ -74,6 +74,7 @@ public class GraphicInput extends JFrame implements ActionListener {
             }
 
             Main.robot.init();
+            Main.robot.init();
             UserCode.initialize();
             GraphicDash.resetAll();
             Printouts.clear();

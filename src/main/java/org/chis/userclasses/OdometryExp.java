@@ -3,17 +3,22 @@ package org.chis.userclasses;
 
 import java.util.ArrayList;
 
-import org.chis.sim.Main;
 import org.chis.sim.math.Pose2D;
 import org.ejml.simple.*;
 
 public class OdometryExp {
     public Pose2D robotPose = new Pose2D();
 
+    Gyro gyro;
     Pose2D[] placements;
 
-    public OdometryExp(Pose2D ... placements){
+    public OdometryExp(Gyro gyro, Pose2D ... placements){
+        this.gyro = gyro;
         this.placements = placements;
+    }
+
+    public void setPose(Pose2D newPose){
+        robotPose = newPose;
     }
 
     public void update(WheelData ... wheelData){
@@ -38,9 +43,8 @@ public class OdometryExp {
 
         Pose2D robotStep = new Pose2D(x.get(0), x.get(1), x.get(2)).rotateVec(robotPose.ang);
 
-        robotPose = robotPose.exp(robotStep);
-
-        // robotPose.ang = Main.robot.robotPos.ang;
+        robotPose = robotPose.add(robotStep);
+        robotPose.ang = gyro.getAngle();
     }
 
     public void update(ArrayList<WheelData> arraylist){

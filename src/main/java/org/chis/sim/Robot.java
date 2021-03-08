@@ -19,9 +19,9 @@ public class Robot{
     public double netTorque;
 
     //robot state in meters, radians, and seconds
-    public Pose2D robotPos = new Pose2D();
-    public Pose2D robotVel = new Pose2D();
-    public Pose2D robotAcc = new Pose2D();
+    public Pose2D robotPos;
+    public Pose2D robotVel;
+    public Pose2D robotAcc;
     
 
     VerletIntegrator xIntegrator, yIntegrator, angIntegrator;
@@ -85,6 +85,10 @@ public class Robot{
         yIntegrator = new VerletIntegrator(Constants.INITY.getDouble(), 0, 0, Constants.PHYSICS_DT.getDouble());
         angIntegrator = new VerletIntegrator(Constants.INITANG.getDouble(), 0, 0, Constants.PHYSICS_DT.getDouble());
 
+        robotPos = new Pose2D(xIntegrator.pos, yIntegrator.pos, angIntegrator.pos);
+        robotVel = new Pose2D();
+        robotAcc = new Pose2D();
+        
         update(0);
     }
 

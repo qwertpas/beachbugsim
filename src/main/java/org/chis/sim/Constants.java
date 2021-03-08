@@ -40,7 +40,7 @@ public class Constants{
     public static Constant INITY = new Constant("INITY", 0, Type.DOUBLE); 
     public static Constant INITANG = new Constant("INITANG", 0, Type.DOUBLE);
 
-    public static Constant WHEELANG0 = new Constant("WHEELANG0", Math.toRadians(215), Type.DOUBLE);
+    public static Constant WHEELANG0 = new Constant("WHEELANG0", Math.toRadians(0), Type.DOUBLE);
     public static Constant WHEELANG1 = new Constant("WHEELANG1", Math.toRadians(311), Type.DOUBLE);
     public static Constant WHEELANG2 = new Constant("WHEELANG2", Math.toRadians(237), Type.DOUBLE);
     public static Constant WHEELANG3 = new Constant("WHEELANG3", Math.toRadians(207), Type.DOUBLE);
@@ -55,6 +55,11 @@ public class Constants{
         INITX,
         INITY,
         INITANG,
+        WHEELANG0,
+        WHEELANG1,
+        WHEELANG2,
+        WHEELANG3,
+        DISPLAY_SCALE,
         SIMSPEED,
         PHYSICS_DT,
         USERCODE_DT,
@@ -63,7 +68,6 @@ public class Constants{
         SWERVE_MOI,
         WHEEL_XDIST,
         WHEEL_YDIST,
-        DISPLAY_SCALE,
     };
 
     enum Type{

@@ -8,11 +8,15 @@ import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
 import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
+import org.chis.sim.math.Vector2D.Type;
 
 public class SwerveController {
 
     Module[] modules;
     OdometryExp odo;
+    Gyro gyro;
+
+    Pose2D targetSpeeds;
 
     static final double TICKS_PER_REV = 2048;
     static final double TURN_RATIO = 12.8;
@@ -20,18 +24,28 @@ public class SwerveController {
     static final double WHEEL_RADIUS = Util.inchesToMeters(2);
     static final double DT = Constants.USERCODE_DT.getDouble();
 
-    public SwerveController(Module... modules){
+    public SwerveController(Gyro gyro, Module... modules){
+        this.gyro = gyro;
         this.modules = modules;
 
         Pose2D[] placements = new Pose2D[modules.length];
         for(int moduleIndex = 0; moduleIndex < modules.length; moduleIndex++){
             placements[moduleIndex] = modules[moduleIndex].placement;
         }
-        // odo = new OdometryLinear(placements);
-        odo = new OdometryExp(placements);
+
+        odo = new OdometryExp(gyro, placements);
+    }
+
+    public void init(Pose2D initPose){
+        for(Module module : modules){
+            module.lastDrivePos = 0;
+            module.currentDrivePos = 0;
+        }
+        odo.setPose(initPose);
     }
 
     public void nyoom(Pose2D robotSpeeds){
+        this.targetSpeeds = robotSpeeds;
 
         ArrayList<WheelData> wheelSteps = new ArrayList<WheelData>();
         for(Module module : modules){
@@ -43,6 +57,21 @@ public class SwerveController {
         }
 
         odo.update(wheelSteps);
+    }
+
+    public void nyoom(Vector2D robotSpeeds){
+        nyoom(new Pose2D(robotSpeeds, 0));
+    }
+
+    public void nyoomToPoint(Vector2D endpointGlobal, double speed){
+        Vector2D endpointRel = odo.robotPose.getRelative(endpointGlobal);
+        nyoom(new Vector2D(speed, endpointRel.getAngle(), Type.POLAR));
+    }
+
+    public void nyoomAboutPoint(Vector2D centerGlobal, double speed, double angle){
+        Vector2D centerRel = odo.robotPose.getRelative(centerGlobal);
+        double angVel = speed / centerRel.getMagnitude();
+        nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), angVel));
     }
 
 
@@ -101,7 +130,7 @@ public class SwerveController {
             targetDriveSpeed = targetSpeedVector.getMagnitude();
             
             
-            if(Math.abs(targetDriveSpeed) < 0.){ // was 0.5
+            if(Math.abs(targetDriveSpeed) < 0.5){ // was 0.5
                 targetAngle = calcClosestModuleAngle180(currentAngle, targetAngle);
                 if(reversed) targetDriveSpeed *= -1;
             }else{

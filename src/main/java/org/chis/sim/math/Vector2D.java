@@ -71,13 +71,18 @@ public class Vector2D {
         return new Vector2D(-this.y, this.x, Type.CARTESIAN);
     }
 
+    public double dist(Vector2D otherVec) {
+        return this.subtract(otherVec).getMagnitude();
+    }
+
+    public Vector2D getRelative(Vector2D globalVec){
+        return globalVec.subtract(this);
+    }
+
     public double getMagnitude() {
         return Math.sqrt(x * x + y * y);
     }
 
-    public double dist(Vector2D otherVec) {
-        return this.subtract(otherVec).getMagnitude();
-    }
 
     public double getAngle() {
         return Math.atan2(y, x);
