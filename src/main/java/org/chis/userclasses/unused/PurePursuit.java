@@ -1,4 +1,4 @@
-package org.chis.userclasses.paths;
+package org.chis.userclasses.unused;
 
 import java.util.ArrayList;
 

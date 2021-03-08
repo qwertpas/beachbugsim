@@ -36,7 +36,6 @@ public class UserCode{
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
 
-
         //DRIVE CODE
         double heading = swerve.gyro.getAngle();
         Pose2D odoPose = swerve.odo.robotPose;
@@ -45,8 +44,11 @@ public class UserCode{
         Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(4);
 
 
-        swerve.nyoomToPoint(new Vector2D(0, 0, Type.CARTESIAN), 2);
+        // swerve.nyoomToPoint(new Vector2D(0, 0, Type.CARTESIAN), 2);
+        swerve.nyoomAboutPoint(new Vector2D(-3.5, 1, Type.CARTESIAN), 2);
         // swerve.nyoom(targetRobotSpeeds);
+
+        
 
 
 
@@ -61,14 +63,11 @@ public class UserCode{
         robotLinVel.putNumber("tarY", swerve.targetSpeeds.y, Color.BLUE);
         robotAngVel.putNumber("tarAng", swerve.targetSpeeds.ang, Color.BLUE);
 
-        robotLinVel.putNumber("curX", Main.robot.robotVel.rotate(Main.robot.robotVel.ang).x, Color.RED);
-        robotLinVel.putNumber("curY", Main.robot.robotVel.rotate(Main.robot.robotVel.ang).y, Color.RED);
+        robotLinVel.putNumber("curX", Main.robot.robotVel.rotate(-heading).x, Color.RED);
+        robotLinVel.putNumber("curY", Main.robot.robotVel.rotate(-heading).y, Color.RED);
         robotAngVel.putNumber("curAng", Main.robot.robotVel.ang, Color.RED);
 
-        Printouts.put("odopose", swerve.odo.robotPose);
-        Printouts.put("encoder ang", swerve.modules[0].currentAngle - swerve.modules[0].lastAngle);
-        Printouts.put("encoder dist", swerve.modules[0].currentDrivePos - swerve.modules[0].lastDrivePos);
-
+        Printouts.put("odoPose", odoPose);
     }
 
     public static double encoderToDist(double encoder){

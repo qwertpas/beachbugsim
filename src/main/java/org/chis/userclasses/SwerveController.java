@@ -68,7 +68,7 @@ public class SwerveController {
         nyoom(new Vector2D(speed, endpointRel.getAngle(), Type.POLAR));
     }
 
-    public void nyoomAboutPoint(Vector2D centerGlobal, double speed, double angle){
+    public void nyoomAboutPoint(Vector2D centerGlobal, double speed){
         Vector2D centerRel = odo.robotPose.getRelative(centerGlobal);
         double angVel = speed / centerRel.getMagnitude();
         nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), angVel));

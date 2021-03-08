@@ -43,7 +43,7 @@ public class OdometryExp {
 
         Pose2D robotStep = new Pose2D(x.get(0), x.get(1), x.get(2)).rotateVec(robotPose.ang);
 
-        robotPose = robotPose.add(robotStep);
+        robotPose = robotPose.exp(robotStep);
         robotPose.ang = gyro.getAngle();
     }
 
@@ -54,8 +54,8 @@ public class OdometryExp {
     }
 
     public static void main(String[] args) {
-        Pose2D initPose = new Pose2D(0, 0, Math.toRadians(66.782));
-        Pose2D step = new Pose2D(2.56, 0, -Math.toRadians(180 - 138.148));
+        Pose2D initPose = new Pose2D();
+        Pose2D step = new Pose2D(7.158506, 0, Math.toRadians(42));
 
         System.out.println("exp: " + initPose.exp(step));
         System.out.println("add: " + initPose.add(step));
