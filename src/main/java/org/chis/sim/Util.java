@@ -398,4 +398,8 @@ public class Util {
         }
     }
 
+    public static boolean between(double value, double lower, double upper){
+        return value >= lower && value <=upper;
+    }
+
 }

@@ -12,17 +12,17 @@ import org.chis.sim.math.Vector2D.Type;
 
 public class SwerveController {
 
-    Module[] modules;
-    OdometryExp odo;
-    Gyro gyro;
+    public Module[] modules;
+    public OdometryExp odo;
+    public Gyro gyro;
 
-    Pose2D targetSpeeds;
+    public Pose2D targetSpeeds = new Pose2D();
 
-    static final double TICKS_PER_REV = 2048;
-    static final double TURN_RATIO = 12.8;
-    static final double DRIVE_RATIO = 6.86;
-    static final double WHEEL_RADIUS = Util.inchesToMeters(2);
-    static final double DT = Constants.USERCODE_DT.getDouble();
+    public static final double TICKS_PER_REV = 2048;
+    public static final double TURN_RATIO = 12.8;
+    public static final double DRIVE_RATIO = 6.86;
+    public static final double WHEEL_RADIUS = Util.inchesToMeters(2);
+    public static final double DT = Constants.USERCODE_DT.getDouble();
 
     public SwerveController(Gyro gyro, Module... modules){
         this.gyro = gyro;
@@ -74,6 +74,10 @@ public class SwerveController {
         nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), angVel));
     }
 
+    public void stop(){
+        nyoom(new Pose2D());
+    }
+
 
     public static class Module{
         Pose2D placement;
@@ -111,11 +115,6 @@ public class SwerveController {
             Vector2D linVelo = robotSpeeds.getVector2D();
             double angVelo = robotSpeeds.ang;
 
-            if(linVelo.getMagnitude() < 0.1 && Math.abs(angVelo) < 0.1){
-                linVelo = new Vector2D();
-                angVelo = 0;
-            }
-
             // ask chis for vector math derivation
             targetSpeedVector = linVelo.add(placement.scalarMult(angVelo).rotate90());
 
@@ -142,11 +141,22 @@ public class SwerveController {
                 }
             }
 
-            turnPower = turnPID.loop(currentAngle, targetAngle, DT);
-            drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed, DT) + targetDriveSpeed * 0.23;
+            //deadband
+            if(linVelo.getMagnitude() < 0.1 && Math.abs(angVelo) < 0.1){
+                linVelo = new Vector2D();
+                angVelo = 0;
 
-            Main.robot.motors.get(turnMotorID).setPower(turnPower);
-            Main.robot.motors.get(driveMotorID).setPower(drivePower);
+                Main.robot.motors.get(turnMotorID).setPower(0);
+                Main.robot.motors.get(driveMotorID).setPower(0);
+            }else{
+                turnPower = turnPID.loop(currentAngle, targetAngle, DT);
+                drivePower = drivePID.loop(currentDriveSpeed, targetDriveSpeed, DT) + targetDriveSpeed * 0.23;
+    
+                Main.robot.motors.get(turnMotorID).setPower(turnPower);
+                Main.robot.motors.get(driveMotorID).setPower(drivePower);
+            }
+
+
         }
         
 

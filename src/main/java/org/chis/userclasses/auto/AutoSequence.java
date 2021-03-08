@@ -2,13 +2,18 @@ package org.chis.userclasses.auto;
 
 import java.util.ArrayList;
 
+import org.chis.userclasses.SwerveController;
+
 public class AutoSequence {
 
-    ArrayList<AbstractAction> actions;
-    int actionIndex;
-    AbstractAction action;
+    public SwerveController swerve;
+    public ArrayList<AbstractAction> actions;
+    public int actionIndex;
+    public AbstractAction action;
+    public boolean done;
     
-    public AutoSequence(AbstractAction... actions_arr){
+    public AutoSequence(SwerveController swerve, AbstractAction... actions_arr){
+        this.swerve = swerve;
 
         //convert array into arraylist
         actions = new ArrayList<AbstractAction>();
@@ -23,10 +28,17 @@ public class AutoSequence {
         actions.add(action_new);
     }
 
-    public void run(){
+    public void runSequence(){
+        
+        if(actionIndex > actions.size() - 1){
+            swerve.stop();
+            done = true;
+            return;
+        }
+
         action = actions.get(actionIndex);
         if(!action.done){
-            action.run();
+            action.runAction(swerve);
         }else{
             actionIndex++;
         }

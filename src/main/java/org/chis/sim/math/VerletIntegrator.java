@@ -31,6 +31,11 @@ public class VerletIntegrator {
         }else{
             vel += acc * dt;
         }
+
+        if(Math.abs(vel) < 0.01){
+            vel = 0;
+        }
+
         pos += vel * dt;
     }
 

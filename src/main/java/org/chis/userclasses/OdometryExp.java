@@ -44,7 +44,7 @@ public class OdometryExp {
         Pose2D robotStep = new Pose2D(x.get(0), x.get(1), x.get(2)).rotateVec(robotPose.ang);
 
         robotPose = robotPose.exp(robotStep);
-        robotPose.ang = gyro.getAngle();
+        robotPose.ang = gyro.getContinuousAngle();
     }
 
     public void update(ArrayList<WheelData> arraylist){

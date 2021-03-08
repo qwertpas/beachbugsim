@@ -19,8 +19,6 @@ public class Constants{
 
     public static Constant SWERVE_MOI = new Constant("SWERVE_MOI", 0.1, Type.DOUBLE);
 
-    //Build problems
-
 
     /** ////////////////////////////////
      * SIMULATOR CONFIG
@@ -45,7 +43,10 @@ public class Constants{
     public static Constant WHEELANG2 = new Constant("WHEELANG2", Math.toRadians(0), Type.DOUBLE);
     public static Constant WHEELANG3 = new Constant("WHEELANG3", Math.toRadians(0), Type.DOUBLE);
 
-
+    /** ////////////////////////////////
+     * USERCODE
+     * //////////////////////////////// */  
+    public static Constant MAX_SPEED = new Constant("MAX_SPEED", 3, Type.DOUBLE);
 
     /** ////////////////////////////////
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
@@ -59,6 +60,7 @@ public class Constants{
         WHEELANG1,
         WHEELANG2,
         WHEELANG3,
+        MAX_SPEED,
         DISPLAY_SCALE,
         SIMSPEED,
         PHYSICS_DT,
