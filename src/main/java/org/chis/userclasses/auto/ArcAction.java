@@ -1,10 +1,8 @@
 package org.chis.userclasses.auto;
 
-import org.chis.sim.Printouts;
 import org.chis.sim.math.Vector2D;
 import org.chis.userclasses.AngleTracker;
 import org.chis.userclasses.SwerveController;
-import org.chis.userclasses.UserCode;
 
 public class ArcAction extends AbstractAction{
 
