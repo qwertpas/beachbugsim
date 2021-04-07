@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.chis.sim.Constants;
 import org.chis.sim.Main;
+import org.chis.sim.Printouts;
 import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
 import org.chis.sim.math.Pose2D;
@@ -68,10 +69,22 @@ public class SwerveController {
         nyoom(new Vector2D(speed, endpointRel.getAngle(), Type.POLAR));
     }
 
-    public void nyoomAboutPoint(Vector2D centerGlobal, double speed){
+    public void nyoomAboutPoint(Vector2D centerGlobal, double speed, boolean rotate){
         Vector2D centerRel = odo.robotPose.getRelative(centerGlobal);
+        Printouts.put("centerGlobal", centerGlobal);
+        Printouts.put("centerRel", centerRel);
         double angVel = speed / centerRel.getMagnitude();
-        nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), angVel));
+
+        if(rotate){
+            nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), angVel));
+        }else{
+            nyoom(new Pose2D(centerRel.scalarMult(-angVel).rotate90(), 0));
+        }
+    }
+
+    public void nyoomToPointAndSpin(Vector2D endpointGlobal, double angVel, double speed){
+        Vector2D endpointRel = odo.robotPose.getRelative(endpointGlobal);
+        nyoom(new Pose2D(new Vector2D(speed, endpointRel.getAngle(), Type.POLAR), angVel));
     }
 
     public void stop(){
@@ -129,7 +142,7 @@ public class SwerveController {
             targetDriveSpeed = targetSpeedVector.getMagnitude();
             
             
-            if(Math.abs(targetDriveSpeed) < 0.5){ // was 0.5
+            if(Math.abs(targetDriveSpeed) < 10){ // was 0.5
                 targetAngle = calcClosestModuleAngle180(currentAngle, targetAngle);
                 if(reversed) targetDriveSpeed *= -1;
             }else{

@@ -42,7 +42,35 @@ public class UserCode{
 
         double speed = Constants.MAX_SPEED.getDouble();
 
-        auto = new AutoSequence(
+
+        // init (-4.15, 1, -0.5): 4.6s
+        AutoSequence searchA = new AutoSequence(
+            swerve, 
+            new LineAction(new Vector2D(-0.8, -0.8, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-0.5, 1.5, Type.CARTESIAN), speed, 0.2, 2.3),
+            new LineAction(new Vector2D(4.5, 1.5, Type.CARTESIAN), speed, 0.2)
+        );
+
+        // init (-4.15, 0, 0): 4.5s
+        AutoSequence searchAStraight = new AutoSequence(
+            swerve, 
+            new LineAction(new Vector2D(-2, 0, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-0.8, -1, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-0.5, 1.3, Type.CARTESIAN), speed, 0.2, 2),
+            new LineAction(new Vector2D(4.5, 1.5, Type.CARTESIAN), speed, 0.2)
+        );
+
+        // init (-4.15, 0.8, 0): 4.3s
+        AutoSequence searchB = new AutoSequence(
+            swerve, 
+            new LineAction(new Vector2D(-2.2, 0.8, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-1, -1, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(0.5, 0.8, Type.CARTESIAN), speed, 0.2, 2),
+            new LineAction(new Vector2D(4.5, 0.8, Type.CARTESIAN), speed, 0.2)
+        );
+
+        // init (-3.5, 0, 0): 9.5s
+        AutoSequence barrel = new AutoSequence(
             swerve, 
             new LineAction(new Vector2D(-0.8, -0.3, Type.CARTESIAN), speed, 0.2),
             new ArcAction(new Vector2D(-0.8, -0.8, Type.CARTESIAN), speed, -1.8*Math.PI),
@@ -52,6 +80,37 @@ public class UserCode{
             new ArcAction(new Vector2D(3, -0.8, Type.CARTESIAN), speed, 1.15*Math.PI),
             new LineAction(new Vector2D(-3.5, 0, Type.CARTESIAN), speed, 0.2)
         );
+
+        // init (-3.4, -1.3, 0): 7.6s
+        AutoSequence slalom = new AutoSequence(
+            swerve, 
+            new ArcAction(new Vector2D(-3, -0.8, Type.CARTESIAN), speed, Math.toRadians(30)),
+            new LineAction(new Vector2D(-1.5, 0, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(1.5, 0, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(2.2, -0.7, Type.CARTESIAN), speed, 0.2),
+            new ArcAction(new Vector2D(3, -0.8, Type.CARTESIAN), speed, 1.8*Math.PI),
+            new LineAction(new Vector2D(1.5, -1.5, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-1.3, -1.5, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(-3.5, 0.3, Type.CARTESIAN), speed, 0.2)
+        );
+
+        // init (-3.4, 0, 0): 8.2s
+        AutoSequence bounce = new AutoSequence(
+            swerve, 
+            new ArcAction(new Vector2D(-3.7, 1.5, Type.CARTESIAN), speed, Math.toRadians(70)),
+            new LineAction(new Vector2D(-2, 0, Type.CARTESIAN), speed, 0.2),
+            new ArcAction(new Vector2D(1, 0.6, Type.CARTESIAN), speed, Math.toRadians(20)),
+            new LineAction(new Vector2D(-0.5, -1, Type.CARTESIAN), speed, 0.2),
+            // new ArcAction(new Vector2D(-0.8, -0.8, Type.CARTESIAN), speed, Math.toRadians(60)),
+            new LineAction(new Vector2D(0, 1.5, Type.CARTESIAN), speed, 0.2),
+            new LineAction(new Vector2D(0, -0.5, Type.CARTESIAN), speed, 0.2),
+            new ArcAction(new Vector2D(1, -0.5, Type.CARTESIAN), speed, Math.toRadians(180)),
+            new LineAction(new Vector2D(2.2, 2, Type.CARTESIAN), speed, 0.2),
+            new ArcAction(new Vector2D(4.3, 2, Type.CARTESIAN), speed, Math.toRadians(60))
+        );
+
+
+        auto = bounce;
     }
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)

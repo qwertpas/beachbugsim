@@ -33,8 +33,8 @@ public class Constants{
     /** ////////////////////////////////
      * INITIAL CONDITIONS
      * //////////////////////////////// */  
-    public static Constant FIELD = new Constant("FIELD", "barrel", Type.STRING); //what field image to use
-    public static Constant INITX = new Constant("INITX", -3.5, Type.DOUBLE); 
+    public static Constant FIELD = new Constant("FIELD", "bounce", Type.STRING); //what field image to use
+    public static Constant INITX = new Constant("INITX", -3.4, Type.DOUBLE); 
     public static Constant INITY = new Constant("INITY", 0, Type.DOUBLE); 
     public static Constant INITANG = new Constant("INITANG", 0, Type.DOUBLE);
 

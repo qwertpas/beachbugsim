@@ -14,7 +14,6 @@ public class Gyro {
 
         if(Util.between(lastRawAngle, 1.5*Math.PI, 2*Math.PI) && Util.between(currRawAngle, 0, 0.5*Math.PI)){
             rotations++;
-            System.out.println("aaa");
         }else if(Util.between(lastRawAngle, 0, 0.5*Math.PI) && Util.between(currRawAngle, 1.5*Math.PI, 2*Math.PI)){
             rotations--;
         }

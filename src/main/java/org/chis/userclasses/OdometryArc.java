@@ -65,10 +65,9 @@ public class OdometryArc {
         OdometryArc odo = new OdometryArc(
             new Pose2D(+0, +0, +0),
 
-            new Pose2D(+1, +1, +0),
-            new Pose2D(-1, +1, +0),
-            new Pose2D(-1, -1, +0),
-            new Pose2D(+1, -1, +0)
+            new Pose2D(+0, +1, 0),
+            new Pose2D(+0, -1, 0),
+            new Pose2D(-1, +0, Math.PI * 0.5)
         );
 
 
@@ -80,10 +79,9 @@ public class OdometryArc {
         // );
 
         odo.update(
-            new WheelData(0, 2),
             new WheelData(0, 1),
-            new WheelData(0.1, 2),
-            new WheelData(0.002, 2)
+            new WheelData(0, 1),
+            new WheelData(Math.PI*0.5, 0)
         );
 
     }
