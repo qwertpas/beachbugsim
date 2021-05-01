@@ -3,11 +3,9 @@ package org.chis.userclasses;
 
 import java.util.ArrayList;
 
-import org.chis.sim.Printouts;
 import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
-import org.ejml.simple.*;
 
 public class OdometryAvg {
     public Pose2D robotPose = new Pose2D();

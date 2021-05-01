@@ -110,7 +110,7 @@ public class UserCode{
         );
 
 
-        auto = bounce;
+        auto = barrel;
     }
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
@@ -126,10 +126,10 @@ public class UserCode{
 
         // swerve.nyoomToPoint(new Vector2D(0, 0, Type.CARTESIAN), 2);
         // swerve.nyoomAboutPoint(new Vector2D(-3.5, 1, Type.CARTESIAN), 2);
-        // swerve.nyoom(targetRobotSpeeds);
+        swerve.nyoom(targetRobotSpeeds);
         // swerve.nyoom(new Pose2D());
 
-        auto.runSequence();
+        // auto.runSequence();
 
 
         // DEBUG

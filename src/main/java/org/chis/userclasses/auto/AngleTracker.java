@@ -1,4 +1,4 @@
-package org.chis.userclasses;
+package org.chis.userclasses.auto;
 
 import org.chis.sim.Util;
 

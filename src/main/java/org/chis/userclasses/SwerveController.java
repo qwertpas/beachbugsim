@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.chis.sim.Constants;
 import org.chis.sim.Main;
-import org.chis.sim.Printouts;
 import org.chis.sim.Util;
 import org.chis.sim.Util.PID;
 import org.chis.sim.math.Pose2D;
@@ -115,7 +114,7 @@ public class SwerveController {
             this.driveMotorID = driveMotorID;
             this.placement = placement;
 
-            turnPID.setkP(2);
+            turnPID.setkP(4);
             turnPID.setkI(15, 0.5, 0.5);
             turnPID.setkD(0.1);
 
