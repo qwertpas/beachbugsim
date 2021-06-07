@@ -172,7 +172,7 @@ public class SwerveController {
         }
         
 
-        private double calcClosestModuleAngle180(double currentAngle, double targetAngle){
+        public double calcClosestModuleAngle180(double currentAngle, double targetAngle){
             double differencePi = (currentAngle - targetAngle) % Math.PI; //angle error from (-180, 180)
     
             double closestAngle;
@@ -188,7 +188,7 @@ public class SwerveController {
             return closestAngle;
         }
 
-        private double calcClosestModuleAngle360(double currentAngle, double targetAngle){
+        public double calcClosestModuleAngle360(double currentAngle, double targetAngle){
             double diffNormalized = Util.normalizeAngle(currentAngle - targetAngle, Math.PI); //angle error from (-PI, PI)
             return currentAngle - diffNormalized;
         }

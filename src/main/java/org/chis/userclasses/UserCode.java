@@ -3,9 +3,15 @@ package org.chis.userclasses;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import org.chis.sim.*;
+import org.chis.sim.Constants;
+import org.chis.sim.GraphicDash;
+import org.chis.sim.GraphicSim;
+import org.chis.sim.Main;
 import org.chis.sim.Motor.MotorType;
-import org.chis.sim.math.*;
+import org.chis.sim.NTosc;
+import org.chis.sim.Printouts;
+import org.chis.sim.math.Pose2D;
+import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
 import org.chis.userclasses.SwerveController.Module;
 import org.chis.userclasses.auto.ArcAction;
@@ -111,6 +117,8 @@ public class UserCode{
 
 
         auto = barrel;
+
+        NTosc.start();
     }
 
     public static void execute(){ //this function is run 50 times a second (every 0.02 second)
@@ -120,8 +128,21 @@ public class UserCode{
         double heading = gyro.getContinuousAngle();
         Pose2D odoPose = swerve.odo.robotPose;
 
-        Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -4);
-        Pose2D targetRobotSpeeds = joystick.rotateVec(-heading).scalarMult(4);
+        // Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -4);
+        Pose2D joystick = NTosc.getPose().scalarMult(15);
+        Printouts.put("1", NTosc.get1());
+        Printouts.put("2", NTosc.get2());
+        Printouts.put("joystick", joystick);
+        
+
+        Pose2D targetRobotSpeeds = new Pose2D();
+
+        targetRobotSpeeds.x = (odoPose.x - joystick.x) * -3;
+        targetRobotSpeeds.y = (odoPose.y - joystick.y) * -3;
+        targetRobotSpeeds.ang = (heading - joystick.ang) * -0;
+
+        targetRobotSpeeds = new Pose2D(targetRobotSpeeds.getVector2D().rotate(-heading), targetRobotSpeeds.ang);
+
 
 
         // swerve.nyoomToPoint(new Vector2D(0, 0, Type.CARTESIAN), 2);
@@ -133,8 +154,12 @@ public class UserCode{
 
 
         // DEBUG
-        trail.add(Main.robot.robotPos.getVector2D());
-        GraphicSim.addDrawingGlobal(trail, Color.GREEN.darker());
+        trail.add(joystick.getVector2D());
+        if(trail.size() > 20){
+            trail.remove(0);
+        }
+
+        GraphicSim.addDrawingGlobal(trail, Color.RED);
 
         GraphicSim.updateOdometryDrawing(odoPose);
 

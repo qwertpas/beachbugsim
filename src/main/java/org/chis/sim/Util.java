@@ -175,16 +175,13 @@ public class Util {
 
             P = kP * error;
 
-            if (kI != 0 && Math.abs(error) < IworkingRange && Math.signum(error) == Math.signum(lastError)) {
-                I += kI * error * dt;
-                I = limit(I, ImaxValue);
-            } else {
-                I = 0;
+            if(Math.abs(error) < IworkingRange){
+                I = I + kI * error * dt;
             }
 
             D = kD * (error - lastError) / dt;
-            lastError = error;
 
+            lastError = error;
             power = P + I + D;
             return power;
         }

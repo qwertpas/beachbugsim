@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch NTosc",
+            "request": "launch",
+            "mainClass": "org.chis.sim.NTosc",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
             "name": "Launch OdometryArc",
             "request": "launch",
             "mainClass": "org.chis.userclasses.OdometryArc",

@@ -1,13 +1,12 @@
 package org.chis.sim;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.BasicStroke;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
-
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +17,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.chis.sim.math.*;
+import org.chis.sim.math.Pose2D;
+import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
 import org.chis.sim.wheels.CoaxSwerveModule;
 import org.chis.sim.wheels.Wheel;
@@ -127,8 +127,8 @@ public class GraphicSim extends JPanel {
 			for(Serie serie : userPointsGlobal){
 				g.setColor(serie.color);
 				for(int i = 0; i < serie.points.size() - 1; i++){
-					int[] scaledPos1 = meterToPixel(serie.points.get(i).x, serie.points.get(i).y, false);
-					int[] scaledPos2 = meterToPixel(serie.points.get(i + 1).x, serie.points.get(i + 1).y, false);
+					int[] scaledPos1 = meterToPixel(serie.points.get(i).x, serie.points.get(i).y, true);
+					int[] scaledPos2 = meterToPixel(serie.points.get(i + 1).x, serie.points.get(i + 1).y, true);
 					g.drawLine(scaledPos1[0], scaledPos1[1], scaledPos2[0], scaledPos2[1]);
 				}
 			}
