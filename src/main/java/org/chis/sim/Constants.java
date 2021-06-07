@@ -46,7 +46,8 @@ public class Constants{
     /** ////////////////////////////////
      * USERCODE
      * //////////////////////////////// */  
-    public static Constant MAX_SPEED = new Constant("MAX_SPEED", 3, Type.DOUBLE);
+     public static Constant MAX_SPEED = new Constant("MAX_SPEED", 6, Type.DOUBLE);
+     public static Constant LOOKAHEAD = new Constant("LOOKAHEAD", 1, Type.DOUBLE);
 
     /** ////////////////////////////////
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
@@ -61,6 +62,7 @@ public class Constants{
         WHEELANG2,
         WHEELANG3,
         MAX_SPEED,
+        LOOKAHEAD,
         DISPLAY_SCALE,
         SIMSPEED,
         PHYSICS_DT,

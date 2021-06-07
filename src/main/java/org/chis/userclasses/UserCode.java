@@ -21,6 +21,7 @@ import org.chis.userclasses.auto.LineAction;;
 
 public class UserCode{
 
+    static ArrayList<Vector2D> path = new ArrayList<Vector2D>();
     static ArrayList<Vector2D> trail = new ArrayList<Vector2D>();
 
     static GraphicDash robotLinVel = new GraphicDash("robotLinVel", 100, true);
@@ -129,9 +130,7 @@ public class UserCode{
         Pose2D odoPose = swerve.odo.robotPose;
 
         // Pose2D joystick = new Pose2D(Controls.rawX, -Controls.rawY, Controls.slider * -4);
-        Pose2D joystick = NTosc.getPose().scalarMult(15);
-        Printouts.put("1", NTosc.get1());
-        Printouts.put("2", NTosc.get2());
+        Vector2D joystick = NTosc.get().scalarMult(7);
         Printouts.put("joystick", joystick);
         
 
@@ -139,7 +138,6 @@ public class UserCode{
 
         targetRobotSpeeds.x = (odoPose.x - joystick.x) * -3;
         targetRobotSpeeds.y = (odoPose.y - joystick.y) * -3;
-        targetRobotSpeeds.ang = (heading - joystick.ang) * -0;
 
         targetRobotSpeeds = new Pose2D(targetRobotSpeeds.getVector2D().rotate(-heading), targetRobotSpeeds.ang);
 
@@ -147,18 +145,24 @@ public class UserCode{
 
         // swerve.nyoomToPoint(new Vector2D(0, 0, Type.CARTESIAN), 2);
         // swerve.nyoomAboutPoint(new Vector2D(-3.5, 1, Type.CARTESIAN), 2);
-        swerve.nyoom(targetRobotSpeeds);
+        // swerve.nyoom(targetRobotSpeeds);
+        swerve.nyoomPursuit(path, Constants.MAX_SPEED.getDouble(), Constants.LOOKAHEAD.getDouble());
         // swerve.nyoom(new Pose2D());
 
         // auto.runSequence();
 
 
         // DEBUG
-        trail.add(joystick.getVector2D());
-        if(trail.size() > 20){
+        path.add(joystick);
+        trail.add(Main.robot.robotPos);
+        if(path.size() > 100){
+            path.remove(0);
+        }
+        if(trail.size() > 100){
             trail.remove(0);
         }
 
+        GraphicSim.addDrawingGlobal(path, Color.GREEN);
         GraphicSim.addDrawingGlobal(trail, Color.RED);
 
         GraphicSim.updateOdometryDrawing(odoPose);

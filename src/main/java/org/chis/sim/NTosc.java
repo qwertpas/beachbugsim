@@ -15,8 +15,7 @@ import com.illposed.osc.transport.OSCPortIn;
 
 public class NTosc {
 
-    public static Vector2D finger1 = new Vector2D(0, 0, Type.CARTESIAN);
-    public static Vector2D finger2 = new Vector2D(1, 1, Type.CARTESIAN);
+    public static Vector2D finger = new Vector2D(0, 0, Type.CARTESIAN);
 
     public static void start() {
 
@@ -29,21 +28,12 @@ public class NTosc {
                     double x = Double.valueOf(data.get(0).toString());
                     double y = Double.valueOf(data.get(1).toString());
 
-                    Vector2D temp = new Vector2D(x, y, Type.CARTESIAN);
-
-                    if(temp.dist(finger1) < temp.dist(finger2)){
-                        finger1 = temp;
-                    }else{
-                        finger2 = temp;
-                    }
-
-
+                    finger = new Vector2D(x, y, Type.CARTESIAN);
                 }
             };
             MessageSelector[] selectors = {
-                new OSCPatternAddressMessageSelector("/syntien/untitled/1/2dslider1"),
-                new OSCPatternAddressMessageSelector("/syntien/untitled/1/spinner1"),
                 new OSCPatternAddressMessageSelector("/syntien/basic/1/touchpad1/press"),
+                new OSCPatternAddressMessageSelector("/syntien/touchpad/1/touchpad1/press"),
             };
 
             for(MessageSelector selector : selectors){
@@ -56,16 +46,8 @@ public class NTosc {
         }
     }
 
-    public static Vector2D get1(){
-        return finger1.scalarMult(2).subtract(new Vector2D(1, 1, Type.CARTESIAN));
-    }
-
-    public static Vector2D get2(){
-        return finger2.scalarMult(2).subtract(new Vector2D(1, 1, Type.CARTESIAN));
-    }
-
-    public static Pose2D getPose(){
-        return new Pose2D(get1().add(get2()).scalarDiv(2), get1().subtract(get2()).rotate90().getAngle());
+    public static Vector2D get(){
+        return finger.scalarMult(2).subtract(new Vector2D(1, 1, Type.CARTESIAN));
     }
 
     public static void main(String[] args) {
@@ -76,7 +58,7 @@ public class NTosc {
 
             try {
                 Thread.sleep(100);
-                System.out.println(get1() + " : " + get2());
+                System.out.println(get());
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

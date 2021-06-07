@@ -86,6 +86,22 @@ public class SwerveController {
         nyoom(new Pose2D(new Vector2D(speed, endpointRel.getAngle(), Type.POLAR), angVel));
     }
 
+    public Vector2D nyoomPursuit(ArrayList<Vector2D> path, double speed, double lookahead){
+        Vector2D point = null;
+        double dist = 0;
+        for(int i = path.size() - 1; i >= 0; i--){
+            point = path.get(i);
+            dist = point.dist(odo.robotPose);
+            if(dist < lookahead){
+                break;
+            }
+        }
+        if(point != null){
+            nyoomToPoint(point, speed * (dist / lookahead));
+        }
+        return point;
+    }
+
     public void stop(){
         nyoom(new Pose2D());
     }
@@ -108,6 +124,8 @@ public class SwerveController {
 
         //stuff for odometry:
         double lastAngle, lastDrivePos, currentDrivePos;
+
+        int debounceTimer = 0;
 
         public Module(int turnMotorID, int driveMotorID, Pose2D placement){
             this.turnMotorID = turnMotorID;
@@ -140,10 +158,11 @@ public class SwerveController {
             targetAngle = targetSpeedVector.getAngle();
             targetDriveSpeed = targetSpeedVector.getMagnitude();
             
-            
-            if(Math.abs(targetDriveSpeed) < 10){ // was 0.5
+            debounceTimer++;
+            if(Math.abs(targetDriveSpeed) < 1 && debounceTimer > 5){ // was 0.5
                 targetAngle = calcClosestModuleAngle180(currentAngle, targetAngle);
                 if(reversed) targetDriveSpeed *= -1;
+                debounceTimer = 0;
             }else{
                 if(reversed){
                     targetAngle = calcClosestModuleAngle360(currentAngle, targetAngle + Math.PI);
