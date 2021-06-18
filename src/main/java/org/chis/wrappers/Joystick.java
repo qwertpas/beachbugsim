@@ -1,25 +1,50 @@
 package org.chis.wrappers;
 
 import org.chis.sim.Controls;
+import org.chis.sim.NTosc;
 
 public class Joystick {
-    public Joystick(int port){
+    int port = 0;
 
+    public Joystick(int port){
+        if(port > 1 || port < 0){
+            System.out.println("Use port 0 for USB joystick or cursor position, port 1 for phone app");
+            System.exit(0);
+        }
+        if(port == 1){
+            NTosc.start();
+        }
     }
 
     public double getX(){
-        return Controls.rawX;
+        if(port == 0){
+            return Controls.rawX;
+        }else{
+            return NTosc.x;
+        }
     }
 
     public double getY(){
-        return Controls.rawY;
+        if(port == 0){
+            return Controls.rawY;
+        }else{
+            return NTosc.y;
+        }
     }
 
     public double getZ(){
-        return Controls.rawZ;
+        if(port == 0){
+            return Controls.rawZ;
+        }else{
+            return NTosc.z;
+        }
     }
 
     public double getThrottle(){
-        return Controls.slider;
+        if(port == 0){
+            return Controls.slider;
+        }else{
+            return NTosc.throttle;
+        }
     }
 }

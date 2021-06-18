@@ -14,7 +14,7 @@ import com.illposed.osc.transport.OSCPortIn;
 
 public class NTosc {
 
-    public static Vector2D finger = new Vector2D(0, 0, Type.CARTESIAN);
+    public static double x, y, z, throttle;
 
     public static void start() {
 
@@ -23,16 +23,26 @@ public class NTosc {
             receiver = new OSCPortIn(6036);
             OSCMessageListener listener = new OSCMessageListener() {
                 public void acceptMessage(OSCMessageEvent event) {
+                    String address = event.getMessage().getAddress();
                     List<Object> data = event.getMessage().getArguments();
-                    double x = Double.valueOf(data.get(0).toString());
-                    double y = Double.valueOf(data.get(1).toString());
 
-                    finger = new Vector2D(x, y, Type.CARTESIAN);
+                    if(address.equals("/syntien/joystick/1/2dslider1")){
+                        x = Double.valueOf(data.get(0).toString());
+                        y = Double.valueOf(data.get(1).toString());
+                    }
+                    if(address.equals("/syntien/joystick/1/slider1")){
+                        throttle = Double.valueOf(data.get(0).toString());
+                    }
+                    if(address.equals("/syntien/joystick/1/slider2")){
+                        z = Double.valueOf(data.get(0).toString());
+                    }
+
                 }
             };
             MessageSelector[] selectors = {
-                new OSCPatternAddressMessageSelector("/syntien/basic/1/touchpad1/press"),
-                new OSCPatternAddressMessageSelector("/syntien/touchpad/1/touchpad1/press"),
+                new OSCPatternAddressMessageSelector("/syntien/joystick/1/2dslider1"),
+                new OSCPatternAddressMessageSelector("/syntien/joystick/1/slider1"),
+                new OSCPatternAddressMessageSelector("/syntien/joystick/1/slider2"),
             };
 
             for(MessageSelector selector : selectors){
@@ -45,9 +55,6 @@ public class NTosc {
         }
     }
 
-    public static Vector2D get(){
-        return finger.scalarMult(2).subtract(new Vector2D(1, 1, Type.CARTESIAN));
-    }
 
     public static void main(String[] args) {
         NTosc.start();
@@ -57,7 +64,7 @@ public class NTosc {
 
             try {
                 Thread.sleep(100);
-                System.out.println(get());
+                System.out.println(x + ", " + y + ", " + z + ", " + throttle);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

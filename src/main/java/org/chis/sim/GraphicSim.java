@@ -9,6 +9,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +55,7 @@ public class GraphicSim extends JPanel {
 	public static Pose2D odoPose;
 	public static boolean drawOdometry = false;
 
-	public static void init(){
+	public static void init() {
 		screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		try {
@@ -65,7 +69,23 @@ public class GraphicSim extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		frame = new JFrame("Robot Sim");
+		
+		String ip = "";
+		try(final DatagramSocket socket = new DatagramSocket()){
+			if(System.getProperty("os.name").toLowerCase().contains("mac")){
+				Socket socketMac = new Socket();
+				socketMac.connect(new InetSocketAddress("google.com", 80));
+				ip = socketMac.getLocalAddress().getHostAddress();
+				socketMac.close();
+			}else{
+				socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+				ip = socket.getLocalAddress().getHostAddress();
+			}	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		frame = new JFrame("Robot Sim " + ip);
 		sim = new GraphicSim();
 		frame.add(sim);
 		frame.setSize(screenWidth - 150, screenHeight - 200);
@@ -173,7 +193,7 @@ public class GraphicSim extends JPanel {
 		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
 		g2d.rotate(Main.robot.robotPos.ang);
 
-		int bumperPixel = (int) (DISP_SCALE * Util.inchesToMeters(2.5));
+		int bumperPixel = (int) (DISP_SCALE * Util.inchesToMeters(3.25));
 		g.setColor(Color.BLUE);
 		g2d.fillRect(-robotLengthDisplay / 2 - bumperPixel, -robotWidthDisplay / 2 - bumperPixel, robotLengthDisplay + 2*bumperPixel, robotWidthDisplay + 2*bumperPixel);
 
