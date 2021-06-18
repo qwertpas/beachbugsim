@@ -1,7 +1,11 @@
 package org.chis.sim;
 
+import java.awt.Color;
+import java.util.ArrayList;
+
+import org.chis.UserCode;
 import org.chis.sim.Util.LooptimeMonitor;
-import org.chis.userclasses.UserCode;
+import org.chis.sim.math.Vector2D;
 
 //runs all of the components together
 public class Main {
@@ -37,6 +41,10 @@ public class Main {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static double getElapsedTime(){
+        return elaspedTime;
     }
 
     public static class DisplayThread implements Runnable{
@@ -76,6 +84,10 @@ public class Main {
         }
     }
 
+    public static ArrayList<Vector2D> trail = new ArrayList<Vector2D>();
+    static GraphicDash robotLinVel = new GraphicDash("Linear Velocity", 100, true);
+    static GraphicDash robotAngVel = new GraphicDash("Angular Velocity", 100, true);
+
     public static class UserCodeThread implements Runnable{
         private boolean exit;
         Thread t;
@@ -89,7 +101,7 @@ public class Main {
         public void run(){
 
             Controls.init();
-            UserCode.initialize();
+            UserCode.robotInit();
 
             new Printouts();
 
@@ -100,9 +112,19 @@ public class Main {
                     clock.start();
 
                     GraphicSim.clearDrawing();
-                    UserCode.execute();
+                    UserCode.teleopPeriodic();
                     Controls.updateControls();
                     GraphicDash.paintAll();
+
+                    robotLinVel.putNumber("Vx", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).x, Color.RED);
+                    robotLinVel.putNumber("Vy", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).y, Color.GREEN.darker());
+                    robotAngVel.putNumber("ω", Main.robot.robotVel.ang, Color.BLUE);
+
+                    trail.add(robot.robotPos);
+                    if(trail.size() > 100){
+                        trail.remove(0);
+                    }
+                    GraphicSim.addDrawingGlobal(trail, Color.RED);
 
                     clock.end();
 

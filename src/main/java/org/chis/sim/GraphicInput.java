@@ -1,12 +1,19 @@
 package org.chis.sim;
 
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+
+import org.chis.UserCode;
 import org.chis.sim.Constants.Constant;
-import org.chis.userclasses.UserCode;
-
-import java.awt.*;
-import java.awt.event.*;
 
 //options panel
 public class GraphicInput extends JFrame implements ActionListener {
@@ -75,7 +82,8 @@ public class GraphicInput extends JFrame implements ActionListener {
 
             Main.robot.init();
             Main.robot.init();
-            UserCode.initialize();
+            UserCode.robotInit();
+            Main.trail.clear();
             GraphicDash.resetAll();
             Printouts.clear();
             GraphicSim.clearDrawing();

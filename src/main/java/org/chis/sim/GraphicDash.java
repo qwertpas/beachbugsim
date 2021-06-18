@@ -3,6 +3,7 @@ package org.chis.sim;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.chis.sim.Serie.Point;
-import org.chis.sim.math.*;
+import org.chis.sim.math.Vector2D;
 
 public class GraphicDash extends JPanel{
 
@@ -53,7 +54,8 @@ public class GraphicDash extends JPanel{
         }
 
         graphicDashs.add(this);
-        Dimension frameSize = new Dimension((GraphicSim.screenWidth - 150 - 300) / (graphicDashs.size()), 200);
+        int screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        Dimension frameSize = new Dimension((screenWidth - 150 - 300) / (graphicDashs.size()), 200);
         for(int i = 0; i < graphicDashs.size(); i++){
             graphicDashs.get(i).frame.setSize(frameSize);
             graphicDashs.get(i).frame.setLocation(150 + i * frameSize.width, 0);
@@ -86,8 +88,8 @@ public class GraphicDash extends JPanel{
         if(isTracking){
             xMin = Integer.MAX_VALUE;
             xMax = Integer.MIN_VALUE;
-            yMin = Integer.MAX_VALUE;
-            yMax = Integer.MIN_VALUE;
+            // yMin = Integer.MAX_VALUE;
+            // yMax = Integer.MIN_VALUE;
         }
 
         for(Serie serie : series){

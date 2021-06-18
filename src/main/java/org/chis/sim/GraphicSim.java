@@ -173,10 +173,14 @@ public class GraphicSim extends JPanel {
 		g2d.translate(robotPixelPos[0], robotPixelPos[1]);
 		g2d.rotate(Main.robot.robotPos.ang);
 
-		g.setColor(Color.BLACK);
-		g2d.fillRect(-robotLengthDisplay / 2, -robotWidthDisplay / 2, robotLengthDisplay, robotWidthDisplay);
+		int bumperPixel = (int) (DISP_SCALE * Util.inchesToMeters(2.5));
+		g.setColor(Color.BLUE);
+		g2d.fillRect(-robotLengthDisplay / 2 - bumperPixel, -robotWidthDisplay / 2 - bumperPixel, robotLengthDisplay + 2*bumperPixel, robotWidthDisplay + 2*bumperPixel);
 
-		g.setColor(Color.LIGHT_GRAY);
+		g.setColor(Color.GRAY);
+		g2d.fillRect(-robotLengthDisplay / 2, -robotWidthDisplay / 2, robotLengthDisplay, robotWidthDisplay);
+		
+		g.setColor(Color.BLACK);
 		g2d.fillRect(robotLengthDisplay/2 - 10, -5, 10, 10);
 
 		

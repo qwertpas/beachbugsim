@@ -178,6 +178,9 @@ public class Util {
             if(Math.abs(error) < IworkingRange){
                 I = I + kI * error * dt;
             }
+            if(Math.signum(error) != Math.signum(lastError)){
+                I = 0;
+            }
 
             D = kD * (error - lastError) / dt;
 

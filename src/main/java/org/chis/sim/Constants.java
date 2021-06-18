@@ -46,8 +46,7 @@ public class Constants{
     /** ////////////////////////////////
      * USERCODE
      * //////////////////////////////// */  
-     public static Constant MAX_SPEED = new Constant("MAX_SPEED", 6, Type.DOUBLE);
-     public static Constant LOOKAHEAD = new Constant("LOOKAHEAD", 1, Type.DOUBLE);
+     public static Constant DEMOCONSTANT = new Constant("DEMOCONSTANT", 6, Type.DOUBLE);
 
     /** ////////////////////////////////
      * ADD CONSTANTS TO THIS LIST TO BE EDITABLE
@@ -61,8 +60,6 @@ public class Constants{
         WHEELANG1,
         WHEELANG2,
         WHEELANG3,
-        MAX_SPEED,
-        LOOKAHEAD,
         DISPLAY_SCALE,
         SIMSPEED,
         PHYSICS_DT,
@@ -72,6 +69,7 @@ public class Constants{
         SWERVE_MOI,
         WHEEL_XDIST,
         WHEEL_YDIST,
+        DEMOCONSTANT,
     };
 
     enum Type{

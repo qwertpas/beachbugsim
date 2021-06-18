@@ -3,7 +3,6 @@ package org.chis.sim;
 import java.io.IOException;
 import java.util.List;
 
-import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
 
