@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import org.chis.Main;
 import org.chis.UserCode;
 import org.chis.sim.Constants.Constant;
 
@@ -97,7 +98,7 @@ public class GraphicInput extends JFrame implements ActionListener {
     }
 
     static long lastTimePaused = 0;
-    static long totalTimePaused = 0;
+    public static long totalTimePaused = 0;
     public static void pause(){
         Main.paused = true;
         lastTimePaused = System.nanoTime();

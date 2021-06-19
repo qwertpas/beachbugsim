@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.chis.Main;
 import org.chis.sim.Serie.Point;
 import org.chis.sim.math.Vector2D;
 

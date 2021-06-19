@@ -1,6 +1,6 @@
 package org.chis.wrappers;
 
-import org.chis.sim.Main;
+import org.chis.Main;
 import org.chis.wrappers.SPI.Port;
 
 public class AHRS {

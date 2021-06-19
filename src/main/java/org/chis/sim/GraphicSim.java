@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.chis.Main;
 import org.chis.sim.math.Pose2D;
 import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
@@ -41,7 +42,7 @@ public class GraphicSim extends JPanel {
 
 	static int screenHeight, screenWidth;
 	static int windowWidth, windowHeight;
-	static GraphicSim sim;
+	public static GraphicSim sim;
 
 	static double DISP_SCALE;
 

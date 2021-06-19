@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import org.chis.sim.Constants;
 import org.chis.sim.GraphicDash;
-import org.chis.sim.Main;
 import org.chis.sim.Motor.MotorType;
 import org.chis.sim.Printouts;
 import org.chis.wrappers.AHRS;

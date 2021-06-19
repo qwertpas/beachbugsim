@@ -1,9 +1,15 @@
-package org.chis.sim;
+package org.chis;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-import org.chis.UserCode;
+import org.chis.sim.Constants;
+import org.chis.sim.Controls;
+import org.chis.sim.GraphicDash;
+import org.chis.sim.GraphicInput;
+import org.chis.sim.GraphicSim;
+import org.chis.sim.Printouts;
+import org.chis.sim.Robot;
 import org.chis.sim.Util.LooptimeMonitor;
 import org.chis.sim.math.Vector2D;
 

@@ -4,9 +4,9 @@ import java.awt.MouseInfo;
 import java.util.ArrayList;
 
 import net.java.games.input.Component;
+import net.java.games.input.Component.Identifier;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Component.Identifier;
 
 public class Controls {
 
@@ -47,7 +47,7 @@ public class Controls {
         }
     }
 
-    static void updateControls() {
+    public static void updateControls() {
 		if (usingMouse) {
 			getMouseData();
 		} else {
