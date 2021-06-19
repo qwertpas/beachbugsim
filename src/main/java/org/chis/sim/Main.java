@@ -111,14 +111,14 @@ public class Main {
                 if(!paused){
                     clock.start();
 
+                    robotLinVel.putNumber("Vx", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).x, Color.RED);
+                    robotLinVel.putNumber("Vy", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).y, Color.GREEN.darker());
+                    robotAngVel.putNumber("ω", Main.robot.robotVel.ang, Color.BLUE);
+
                     GraphicSim.clearDrawing();
                     UserCode.teleopPeriodic();
                     Controls.updateControls();
                     GraphicDash.paintAll();
-
-                    robotLinVel.putNumber("Vx", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).x, Color.RED);
-                    robotLinVel.putNumber("Vy", Main.robot.robotVel.rotate(-Main.robot.robotPos.ang).y, Color.GREEN.darker());
-                    robotAngVel.putNumber("ω", Main.robot.robotVel.ang, Color.BLUE);
 
                     trail.add(robot.robotPos);
                     if(trail.size() > 100){

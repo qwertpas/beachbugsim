@@ -14,6 +14,7 @@ public class Joystick {
         if(port == 1){
             NTosc.start();
         }
+        this.port = port;
     }
 
     public double getX(){

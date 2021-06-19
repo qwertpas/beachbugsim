@@ -12,6 +12,7 @@ public class WPI_TalonFX {
     private int whichEncoder = 2;
 
     private PID pid = new PID();
+    private double kF = 0;
 
     public WPI_TalonFX(int deviceNumber){
         if(deviceNumber == 0){
@@ -34,12 +35,12 @@ public class WPI_TalonFX {
 
         if(mode == ControlMode.Position){
             pid.loop(getSelectedSensorPosition(), value, 0.02);
-            motor.setPower(pid.getPower());
+            motor.setPower(pid.getPower() + kF*value);
         }
 
         if(mode == ControlMode.Velocity){
             pid.loop(getSelectedSensorVelocity(), value, 0.02); //ticks per 100ms
-            motor.setPower(pid.getPower());
+            motor.setPower(pid.getPower() + kF*value);
         }
     }
 
@@ -66,7 +67,7 @@ public class WPI_TalonFX {
         }
     }
 
-
+    /** @return encoder ticks */
     public double getSelectedSensorPosition(){
         if(whichEncoder == 0){
             return cancoder0.getPosition();
@@ -77,7 +78,7 @@ public class WPI_TalonFX {
         }
     }
 
-    
+    /** @return encoder ticks per 100ms */
     public double getSelectedSensorVelocity(){
         if(whichEncoder == 0){
             return cancoder0.getVelocity();
@@ -110,5 +111,13 @@ public class WPI_TalonFX {
             System.exit(0);
         }
         pid.setkD(value);
+    }
+
+    public void config_kF(int slotIdx, double value){
+        if(slotIdx != 0){
+            System.out.println("Use slotIDx 0 when configuring PID.");
+            System.exit(0);
+        }
+        kF = value;
     }
 }

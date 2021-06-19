@@ -3,9 +3,6 @@ package org.chis.sim;
 import java.io.IOException;
 import java.util.List;
 
-import org.chis.sim.math.Vector2D;
-import org.chis.sim.math.Vector2D.Type;
-
 import com.illposed.osc.MessageSelector;
 import com.illposed.osc.OSCMessageEvent;
 import com.illposed.osc.OSCMessageListener;
@@ -14,7 +11,7 @@ import com.illposed.osc.transport.OSCPortIn;
 
 public class NTosc {
 
-    public static double x, y, z, throttle;
+    public static double x, y, z, throttle = 0;
 
     public static void start() {
 
@@ -27,14 +24,14 @@ public class NTosc {
                     List<Object> data = event.getMessage().getArguments();
 
                     if(address.equals("/syntien/joystick/1/2dslider1")){
-                        x = Double.valueOf(data.get(0).toString());
-                        y = Double.valueOf(data.get(1).toString());
+                        x = Double.valueOf(data.get(0).toString()) * 2 - 1;
+                        y = -(Double.valueOf(data.get(1).toString()) * 2 - 1);
                     }
                     if(address.equals("/syntien/joystick/1/slider1")){
-                        throttle = Double.valueOf(data.get(0).toString());
+                        throttle = Double.valueOf(data.get(0).toString()) * 2 - 1;
                     }
                     if(address.equals("/syntien/joystick/1/slider2")){
-                        z = Double.valueOf(data.get(0).toString());
+                        z = Double.valueOf(data.get(0).toString()) * 2 - 1;
                     }
 
                 }

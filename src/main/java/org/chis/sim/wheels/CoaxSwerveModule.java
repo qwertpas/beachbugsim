@@ -2,8 +2,10 @@ package org.chis.sim.wheels;
 
 import org.chis.sim.Motor;
 import org.chis.sim.Util;
-import org.chis.sim.math.*;
+import org.chis.sim.math.Pose2D;
+import org.chis.sim.math.Vector2D;
 import org.chis.sim.math.Vector2D.Type;
+import org.chis.sim.math.VerletIntegrator;
 
 public class CoaxSwerveModule extends Wheel {
 
@@ -83,8 +85,8 @@ public class CoaxSwerveModule extends Wheel {
         scrubForce = Util.applyFrictions(
             0,
             wheelTranslation.y,
-            190,
-            190,
+            100,
+            100,
             10,
             0.01
         );

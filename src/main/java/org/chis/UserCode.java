@@ -16,23 +16,41 @@ import org.chis.wrappers.SensorInitializationStrategy;
 import org.chis.wrappers.TalonFXFeedbackDevice;
 import org.chis.wrappers.WPI_TalonFX;;
 
-
+/**
+ * Write and reference code here to control the simulated robot!
+ * 
+ * The example here initializes the hardware, makes the front left module spin towards an
+ * angle determined by the joystick X axis, the back left motor drive at a constant 30%,
+ * and the back right motor to try reach a velocity of 1000 encoder ticks per 100 ms. 
+ */
 public class UserCode{
 
-    //KNOWN VARIABLES (METRIC BASE UNITS)
-    static final double distBetweenWheelsX = 0.6096; //front to back
-    static final double distBetweenWheelsY = 0.5588; //left to right
-    static final double mass = 45.0;
-    static final double wheelRadius = 0.0508;
+    //KNOWN VARIABLES
+    static final double distBetweenWheelsX = 0.6096; //front to back, meters
+    static final double distBetweenWheelsY = 0.5588; //left to right, meters
+    static final double mass = 45.0; //kilograms
+    static final double wheelRadius = 0.0508; //meters
 
     //WPILIB DECLARATIONS
     static AHRS gyro;
     static WPI_TalonFX fl_turn, fl_drive, bl_turn, bl_drive, br_turn, br_drive, fr_turn, fr_drive;
     static CANCoder fl_encoder, bl_encoder, br_encoder, fr_encoder;
-    static Joystick joystick;
+
+    //JOYSTICK
+    /**
+     * Port 0 will search for USB joysticks. If none are found, it will use your mouse cursor coordinates.
+     * 
+     * Port 1 will listen for data sent with the Syntien smartphone app. To get the ip of your computer,
+     * run Main.java and look at the title of the simulation window. Use port 6036. Create a new interface 
+     * named "joystick", then insert one 2dslider and two sliders. The 2dslider simulates X and Y axes,
+     * the first slider simulates joystick throttle, and the second slider simulates the Z axis.
+    */
+    static Joystick joystick = new Joystick(0);
 
     //CUSTOM GRAPHS FOR DEBUG PURPOSES
-    static GraphicDash demoGraph = new GraphicDash("Demo Title", 100, true);
+    /** This creates a new window and you can plot points on it with putNumber() */
+    static GraphicDash fl_angle = new GraphicDash("Front Left Angle", 100, true);
+    static GraphicDash br_velo = new GraphicDash("Back Right Velocity", 100, true);
 
 
     public static void robotInit(){
@@ -80,45 +98,54 @@ public class UserCode{
         fr_turn.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 0);
         fr_drive.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
 
-        joystick = new Joystick(0);
-
+        //EXAMPLE PID FOR FRONT LEFT MODULE ANGLE
         fl_turn.config_kP(0, 0.1);
         fl_turn.config_kI(0, 0.01);
         fl_turn.config_kD(0, 0.001);
+
+        //EXAMPLE PID FOR BACK RIGHT WHEEL VELOCITY
+        br_drive.config_kP(0, 0.001);
+        br_drive.config_kI(0, 0.001);
+        br_drive.config_kD(0, 0.0);
+        br_drive.config_kF(0, 0.00005);
     }
+
 
     public static void teleopPeriodic(){
 
-        //The simulation will read your mouse position XY position if it can't find a USB joystick
         double x = joystick.getX();
-        double y = joystick.getY();
 
-        // fl_drive.set(ControlMode.PercentOutput, x);
-        // bl_drive.set(ControlMode.PercentOutput, x);
-        // br_drive.set(ControlMode.PercentOutput, x);
-        // fr_drive.set(ControlMode.PercentOutput, x);
+        // Simple set percent power 
+        bl_drive.set(ControlMode.PercentOutput, 0.3);
+        
+        // Running built-in PID to reach a certain angle
+        double targetAngle = x * 360; //in degrees
+        fl_turn.set(ControlMode.Position, targetAngle);
 
-        double target = y*360;
-        fl_turn.set(ControlMode.Position, target);
-        // fr_turn.set(ControlMode.PercentOutput, y);
+        // Running built-in PID to reach a certain velocity
+        double targetVelocity = 1000; //in encoders ticks per 100ms
+        br_drive.set(ControlMode.Velocity, targetVelocity);
 
 
+        // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
+        fl_angle.putNumber("fl_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
+        fl_angle.putNumber("fl_targetAngle", targetAngle, Color.RED);
 
+        br_velo.putNumber("br_velo", br_drive.getSelectedSensorVelocity(), Color.BLUE);
+        br_velo.putNumber("br_targetVelo", targetVelocity, Color.RED);
 
-        // DEBUG ///////////////////////////////////////////////////////////////////////
-        demoGraph.putNumber("fl_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
-        demoGraph.putNumber("fl_target", target, Color.RED);
-        Printouts.put("fl angle", fl_turn.getSelectedSensorPosition());
+        Printouts.put("heading", gyro.getYaw());
         Printouts.put("Elapsed Time", Main.getElapsedTime());
     }
 
-    public static double encoderToDist(double encoder){
+
+
+    /**
+     * @param encoder number of encoder ticks
+     * @return distance a wheel has covered, in meters
+     */
+    public static double driveEncoderToDist(double encoder){
         double driveGearRatio = 6.86;
         return encoder / MotorType.FALCON.TICKS_PER_REV / driveGearRatio * 2 * Math.PI * Constants.WHEEL_RADIUS.getDouble();
     }
-
-
-
-
-
 }
