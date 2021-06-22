@@ -6,9 +6,16 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "org.chis.test",
+            "projectName": "joysim2"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Main",
             "request": "launch",
-            "mainClass": "org.chis.Main",
+            "mainClass": "org.chis.Main"
         }
     ]
 }

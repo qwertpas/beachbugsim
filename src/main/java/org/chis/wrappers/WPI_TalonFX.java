@@ -39,7 +39,7 @@ public class WPI_TalonFX {
         }
 
         if(mode == ControlMode.Velocity){
-            pid.loop(getSelectedSensorVelocity(), value, 0.02); //ticks per 100ms
+            pid.loop(getSelectedSensorVelocity(), value, 0.02); //unit is encoder ticks per 100ms
             motor.setPower(pid.getPower() + kF*value);
         }
     }
