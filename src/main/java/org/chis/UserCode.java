@@ -141,20 +141,20 @@ public class UserCode{
     public static void teleopPeriodic(){
 
         double x = joystick.getX();
-        double y = -joystick.getY();
+        double y = joystick.getY();
 
-        double prevAngle = fl_turn.getSelectedSensorPosition();
+        double prevAngle = fl_turn.getSelectedSensorPosition() % 360;
         double angle = Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y));
-        double targetAngle = (Math.toDegrees(angle) + 360);
+        double targetAngle = (Math.toDegrees(angle) + 360) % 360;
 
         double distance1 = Math.abs(prevAngle - targetAngle);
         double distance2 = (360 - distance1);
 
         double newAngle;
         if (distance1 <= distance2)
-            newAngle = prevAngle + distance1;
+            newAngle = prevAngle - distance1;
         else
-            newAngle = prevAngle - distance2;
+            newAngle = prevAngle + distance2;
 
         fl_turn.set(ControlMode.Position, newAngle);
         fr_turn.set(ControlMode.Position, newAngle);
