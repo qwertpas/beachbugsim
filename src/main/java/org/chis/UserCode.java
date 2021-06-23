@@ -50,7 +50,8 @@ public class UserCode{
     /** This creates a new window and you can plot points on it with putNumber() */
     static GraphicDash fl_angle = new GraphicDash("Front Left Angle", 100, true);
     static GraphicDash br_velo = new GraphicDash("Back Right Velocity", 100, true);
-    static GraphicDash tr_angle = new GraphicDash("Target Angle", 100, true);
+    static GraphicDash ms_angle = new GraphicDash("Measured Angle", 100, true);
+    static GraphicDash nw_angle = new GraphicDash("New Angle", 100, true);
 
 
     public static void robotInit(){
@@ -116,23 +117,23 @@ public class UserCode{
         br_turn.config_kD(0, 0.001);
 
         //EXAMPLE PID FOR BACK RIGHT WHEEL VELOCITY
-        fl_drive.config_kP(0, 0.001);
-        fl_drive.config_kI(0, 0.001);
+        fl_drive.config_kP(0, 0.00002);
+        fl_drive.config_kI(0, 0.00005);
         fl_drive.config_kD(0, 0.0);
         fl_drive.config_kF(0, 0.00005);
 
-        fr_drive.config_kP(0, 0.001);
-        fr_drive.config_kI(0, 0.001);
+        fr_drive.config_kP(0, 0.00002);
+        fr_drive.config_kI(0, 0.00005);
         fr_drive.config_kD(0, 0.0);
         fr_drive.config_kF(0, 0.00005);
 
-        bl_drive.config_kP(0, 0.001);
-        bl_drive.config_kI(0, 0.001);
+        bl_drive.config_kP(0, 0.00002);
+        bl_drive.config_kI(0, 0.00005);
         bl_drive.config_kD(0, 0.0);
         bl_drive.config_kF(0, 0.00005);
 
-        br_drive.config_kP(0, 0.001);
-        br_drive.config_kI(0, 0.001);
+        br_drive.config_kP(0, 0.00002);
+        br_drive.config_kI(0, 0.00005);
         br_drive.config_kD(0, 0.0);
         br_drive.config_kF(0, 0.00005);
     }
@@ -145,17 +146,20 @@ public class UserCode{
 
         double prevAngle = fl_turn.getSelectedSensorPosition();
         double rotations = (int)(prevAngle/360);
-        // double angle = Math.toDegrees(Math.atan2(-y, x));
-        double angle = Math.toDegrees(Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y)));
+        double angle = Math.toDegrees(Math.atan2(-y, x));
+        // double angle = Math.toDegrees(Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y)));
+        angle += 360 * rotations;
 
-        double distance1 = prevAngle - angle + 360*rotations;
-        double distance2 = 360 - distance1;
+        double distance1 = Math.abs(prevAngle - angle);
+        double distance2 = Math.abs(360 - distance1);
 
-        double newAngle = 0;
-        if (distance1 <= distance2)
-            newAngle = prevAngle + distance1;
-        else
-            newAngle = prevAngle - distance2;
+        double newAngle;
+        if (distance1 <= distance2) {
+            newAngle = prevAngle - distance1;
+        }
+        else {
+            newAngle = prevAngle + distance2;
+        }
 
         fl_turn.set(ControlMode.Position, newAngle);
         fr_turn.set(ControlMode.Position, newAngle);
@@ -181,9 +185,9 @@ public class UserCode{
 
 
         // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
-        fl_angle.putNumber("fl_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
-        // fl_angle.putNumber("fl_targetAngle", targetAngle, Color.RED);
-        tr_angle.putNumber("tr_angle", newAngle, Color.DARK_GRAY);
+        fl_angle.putNumber("robot_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
+        // ms_angle.putNumber("measured_angle", angle, Color.DARK_GRAY);
+        // nw_angle.putNumber("new_angle", newAngle, Color.DARK_GRAY);
 
 
         br_velo.putNumber("br_velo", br_drive.getSelectedSensorVelocity(), Color.BLUE);
