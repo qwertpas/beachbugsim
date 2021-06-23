@@ -143,18 +143,19 @@ public class UserCode{
         double x = joystick.getX();
         double y = joystick.getY();
 
-        double prevAngle = fl_turn.getSelectedSensorPosition() % 360;
-        double angle = Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y));
-        double targetAngle = (Math.toDegrees(angle) + 360) % 360;
+        double prevAngle = fl_turn.getSelectedSensorPosition();
+        double rotations = (int)(prevAngle/360);
+        // double angle = Math.toDegrees(Math.atan2(-y, x));
+        double angle = Math.toDegrees(Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y)));
 
-        double distance1 = Math.abs(prevAngle - targetAngle);
-        double distance2 = (360 - distance1);
+        double distance1 = prevAngle - angle + 360*rotations;
+        double distance2 = 360 - distance1;
 
-        double newAngle;
+        double newAngle = 0;
         if (distance1 <= distance2)
-            newAngle = prevAngle - distance1;
+            newAngle = prevAngle + distance1;
         else
-            newAngle = prevAngle + distance2;
+            newAngle = prevAngle - distance2;
 
         fl_turn.set(ControlMode.Position, newAngle);
         fr_turn.set(ControlMode.Position, newAngle);
