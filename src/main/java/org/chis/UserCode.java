@@ -39,10 +39,9 @@ public class UserCode{
     public static void teleopPeriodic(){
 
         Vector2D targetLinVel = new Vector2D(joystick.getX(), -joystick.getY()).multScalar(3);
-        swerve.nyoom(targetLinVel, 0);
+        swerve.nyoom(targetLinVel, joystick.getZ() * -2);
 
         // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
-        Printouts.put("targetLinVel", targetLinVel.x + ", " + targetLinVel.y);
         Printouts.put("Elapsed Time", Main.getElapsedTime());
     }
 }

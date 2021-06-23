@@ -46,8 +46,8 @@ public class SwerveController {
             turnMotor.config_kI(0, 0.01);
             turnMotor.config_kD(0, 0.001);
 
-            driveMotor.config_kP(0, 0.0005);
-            driveMotor.config_kI(0, 0.0005);
+            driveMotor.config_kP(0, 0.00002);
+            driveMotor.config_kI(0, 0.00005);
             driveMotor.config_kD(0, 0.0);
             driveMotor.config_kF(0, 0.00005);
         }
