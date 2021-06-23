@@ -33,6 +33,8 @@ public class Main {
         new UserCodeThread();
         new DisplayThread();
 
+        GraphicInput.resume();
+
         startTime = System.nanoTime();
         while (true) {
 

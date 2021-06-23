@@ -13,6 +13,7 @@ public class Joystick {
         }
         if(port == 1){
             NTosc.start();
+            System.out.println("phone");
         }
         this.port = port;
     }

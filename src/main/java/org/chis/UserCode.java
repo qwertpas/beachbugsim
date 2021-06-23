@@ -50,6 +50,7 @@ public class UserCode{
     /** This creates a new window and you can plot points on it with putNumber() */
     static GraphicDash fl_angle = new GraphicDash("Front Left Angle", 100, true);
     static GraphicDash br_velo = new GraphicDash("Back Right Velocity", 100, true);
+    static GraphicDash tr_angle = new GraphicDash("Target Angle", 100, true);
 
 
     public static void robotInit(){
@@ -102,7 +103,34 @@ public class UserCode{
         fl_turn.config_kI(0, 0.01);
         fl_turn.config_kD(0, 0.001);
 
+        fr_turn.config_kP(0, 0.1);
+        fr_turn.config_kI(0, 0.01);
+        fr_turn.config_kD(0, 0.001);
+
+        bl_turn.config_kP(0, 0.1);
+        bl_turn.config_kI(0, 0.01);
+        bl_turn.config_kD(0, 0.001);
+
+        br_turn.config_kP(0, 0.1);
+        br_turn.config_kI(0, 0.01);
+        br_turn.config_kD(0, 0.001);
+
         //EXAMPLE PID FOR BACK RIGHT WHEEL VELOCITY
+        fl_drive.config_kP(0, 0.001);
+        fl_drive.config_kI(0, 0.001);
+        fl_drive.config_kD(0, 0.0);
+        fl_drive.config_kF(0, 0.00005);
+
+        fr_drive.config_kP(0, 0.001);
+        fr_drive.config_kI(0, 0.001);
+        fr_drive.config_kD(0, 0.0);
+        fr_drive.config_kF(0, 0.00005);
+
+        bl_drive.config_kP(0, 0.001);
+        bl_drive.config_kI(0, 0.001);
+        bl_drive.config_kD(0, 0.0);
+        bl_drive.config_kF(0, 0.00005);
+
         br_drive.config_kP(0, 0.001);
         br_drive.config_kI(0, 0.001);
         br_drive.config_kD(0, 0.0);
@@ -113,22 +141,49 @@ public class UserCode{
     public static void teleopPeriodic(){
 
         double x = joystick.getX();
+        double y = -joystick.getY();
+
+        double prevAngle = fl_turn.getSelectedSensorPosition();
+        double angle = Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y));
+        double targetAngle = (Math.toDegrees(angle) + 360);
+
+        double distance1 = Math.abs(prevAngle - targetAngle);
+        double distance2 = (360 - distance1);
+
+        double newAngle;
+        if (distance1 <= distance2)
+            newAngle = prevAngle + distance1;
+        else
+            newAngle = prevAngle - distance2;
+
+        fl_turn.set(ControlMode.Position, newAngle);
+        fr_turn.set(ControlMode.Position, newAngle);
+        bl_turn.set(ControlMode.Position, newAngle);
+        br_turn.set(ControlMode.Position, newAngle);
+
+        double power = Math.sqrt(x*x + y*y);
+
+        fl_drive.set(ControlMode.PercentOutput, power);
+        fr_drive.set(ControlMode.PercentOutput, power);
+        bl_drive.set(ControlMode.PercentOutput, power);
+        br_drive.set(ControlMode.PercentOutput, power);
 
         // Simple set percent power 
-        bl_drive.set(ControlMode.PercentOutput, 0.3);
         
-        // Running built-in PID to reach a certain angle
-        double targetAngle = x * 360; //in degrees
-        fl_turn.set(ControlMode.Position, targetAngle);
+        // // Running built-in PID to reach a certain angle
+        // double targetAngle = x * 360; //in degrees
+        // fl_turn.set(ControlMode.Position, targetAngle);
 
         // Running built-in PID to reach a certain velocity
         double targetVelocity = 1000; //in encoders ticks per 100ms
-        br_drive.set(ControlMode.Velocity, targetVelocity);
+        // br_drive.set(ControlMode.Velocity, targetVelocity);
 
 
         // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
         fl_angle.putNumber("fl_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
-        fl_angle.putNumber("fl_targetAngle", targetAngle, Color.RED);
+        // fl_angle.putNumber("fl_targetAngle", targetAngle, Color.RED);
+        tr_angle.putNumber("tr_angle", newAngle, Color.DARK_GRAY);
+
 
         br_velo.putNumber("br_velo", br_drive.getSelectedSensorVelocity(), Color.BLUE);
         br_velo.putNumber("br_targetVelo", targetVelocity, Color.RED);
