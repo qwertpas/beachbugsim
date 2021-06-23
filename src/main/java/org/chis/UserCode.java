@@ -176,8 +176,8 @@ public class UserCode{
 
         // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
         fl_angle.putNumber("robot_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
-        // ms_angle.putNumber("measured_angle", angle, Color.DARK_GRAY);
-        // nw_angle.putNumber("new_angle", newAngle, Color.DARK_GRAY);
+        ms_angle.putNumber("measured_angle", angle, Color.DARK_GRAY);
+        nw_angle.putNumber("new_angle", newAngle, Color.DARK_GRAY);
 
 
         br_velo.putNumber("br_velo", br_drive.getSelectedSensorVelocity(), Color.BLUE);
@@ -188,7 +188,14 @@ public class UserCode{
     }
 
 
-    
+    static double normalize(double angle){
+        angle %= 360.0; // [0..360) if angle is positive, (-360..0] if negative
+        if (angle > 180.0) // was positive
+            return angle - 360.0; // was (180..360) => returning (-180..0)
+        if (angle <= -180.0) // was negative
+            return angle + 360.0; // was (-360..180] => returning (0..180]
+        return angle; // (-180..180]
+    } 
 
 
 
