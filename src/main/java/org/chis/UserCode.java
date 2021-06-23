@@ -145,21 +145,11 @@ public class UserCode{
         double y = joystick.getY();
 
         double prevAngle = fl_turn.getSelectedSensorPosition();
-        double rotations = (int)(prevAngle/360);
         double angle = Math.toDegrees(Math.atan2(-y, x));
         // double angle = Math.toDegrees(Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y)));
-        angle += 360 * rotations;
 
-        double distance1 = Math.abs(prevAngle - angle);
-        double distance2 = Math.abs(360 - distance1);
-
-        double newAngle;
-        if (distance1 <= distance2) {
-            newAngle = prevAngle - distance1;
-        }
-        else {
-            newAngle = prevAngle + distance2;
-        }
+        double turnAngle = normalize(angle - prevAngle);
+        double newAngle = prevAngle + turnAngle;
 
         fl_turn.set(ControlMode.Position, newAngle);
         fr_turn.set(ControlMode.Position, newAngle);
@@ -196,6 +186,9 @@ public class UserCode{
         Printouts.put("heading", gyro.getYaw());
         Printouts.put("Elapsed Time", Main.getElapsedTime());
     }
+
+
+    
 
 
 
