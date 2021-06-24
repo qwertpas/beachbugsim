@@ -20,7 +20,7 @@ public class SwerveController {
 
     public void nyoom(Vector2D linVel, double angVel){
         for(Module module : modules){
-            module.moveModule(linVel.rotate(-gyro.getYaw()), angVel);
+            module.moveModule(linVel.rotateGF(-gyro.getYaw()), angVel);
         }
     }
 
