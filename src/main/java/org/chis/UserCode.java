@@ -27,6 +27,7 @@ public class UserCode{
     //KNOWN VARIABLES
     static final double distBetweenWheelsX = 0.6096; //front to back, meters
     static final double distBetweenWheelsY = 0.5588; //left to right, meters
+    static final double distBetweenWheelsDiag = 0.413482043141; // Diagonally, any corner to the center
     static final double mass = 45.0; //kilograms
     static final double wheelRadius = 0.0508; //meters
 
@@ -151,17 +152,36 @@ public class UserCode{
         double turnAngle = normalize(angle - prevAngle);
         double newAngle = prevAngle + turnAngle;
 
-        fl_turn.set(ControlMode.Position, newAngle);
-        fr_turn.set(ControlMode.Position, newAngle);
-        bl_turn.set(ControlMode.Position, newAngle);
-        br_turn.set(ControlMode.Position, newAngle);
-
         double power = Math.sqrt(x*x + y*y);
 
-        fl_drive.set(ControlMode.PercentOutput, power);
-        fr_drive.set(ControlMode.PercentOutput, power);
-        bl_drive.set(ControlMode.PercentOutput, power);
-        br_drive.set(ControlMode.PercentOutput, power);
+
+
+        double spinWheta = -joystick.getZ();
+        
+        Vector flt = Vector.angleMagTranslation(newAngle, power);
+        Vector frt = Vector.angleMagTranslation(newAngle, power);
+        Vector blt = Vector.angleMagTranslation(newAngle, power);
+        Vector brt = Vector.angleMagTranslation(newAngle, power);
+        
+        Vector flr = Vector.angleMagTranslation(312.510447078, spinWheta*distBetweenWheelsDiag);
+        Vector frr = Vector.angleMagTranslation(407.489552922, spinWheta*distBetweenWheelsDiag);
+        Vector blr = Vector.angleMagTranslation(227.489552922, spinWheta*distBetweenWheelsDiag);
+        Vector brr = Vector.angleMagTranslation(132.510447078, spinWheta*distBetweenWheelsDiag);
+
+        Vector fl = flt.add(flr);
+        Vector fr = frt.add(frr);
+        Vector bl = blt.add(blr);
+        Vector br = brt.add(brr);
+
+        fl_turn.set(ControlMode.Position, fl.getAngleDeg());
+        fr_turn.set(ControlMode.Position, fr.getAngleDeg());
+        bl_turn.set(ControlMode.Position, bl.getAngleDeg());
+        br_turn.set(ControlMode.Position, br.getAngleDeg());
+
+        fl_drive.set(ControlMode.PercentOutput, fl.magnitude());
+        fr_drive.set(ControlMode.PercentOutput, fr.magnitude());
+        bl_drive.set(ControlMode.PercentOutput, bl.magnitude());
+        br_drive.set(ControlMode.PercentOutput, br.magnitude());
 
         // Simple set percent power 
         
