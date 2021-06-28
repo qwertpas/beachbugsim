@@ -145,12 +145,10 @@ public class UserCode{
         double x = joystick.getX();
         double y = joystick.getY();
 
-        double prevAngle = fl_turn.getSelectedSensorPosition();
-        double angle = Math.toDegrees(Math.atan2(-y, x));
-        // double angle = Math.toDegrees(Math.atan2(y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y)));
+        // double angle = Math.toDegrees(Math.atan2(-y, x));
+        double fdir = Math.toDegrees(-gyro.getYaw());
+        double angle = Math.toDegrees(Math.atan2(-y*Math.sqrt(1-0.5*x*x), x*Math.sqrt(1-0.5*y*y))) + fdir;
 
-        double turnAngle = normalize(angle - prevAngle);
-        double newAngle = prevAngle + turnAngle;
 
         double power = Math.sqrt(x*x + y*y);
 
@@ -158,25 +156,25 @@ public class UserCode{
 
         double spinWheta = -joystick.getZ();
         
-        Vector flt = Vector.angleMagTranslation(newAngle, power);
-        Vector frt = Vector.angleMagTranslation(newAngle, power);
-        Vector blt = Vector.angleMagTranslation(newAngle, power);
-        Vector brt = Vector.angleMagTranslation(newAngle, power);
+        Vector flt = Vector.angleMagTranslation(angle, power);
+        Vector frt = Vector.angleMagTranslation(angle, power);
+        Vector blt = Vector.angleMagTranslation(angle, power);
+        Vector brt = Vector.angleMagTranslation(angle, power);
         
-        Vector flr = Vector.angleMagTranslation(312.510447078, spinWheta*distBetweenWheelsDiag);
+        Vector flr = Vector.angleMagTranslation(132.510447078, spinWheta*distBetweenWheelsDiag);
         Vector frr = Vector.angleMagTranslation(407.489552922, spinWheta*distBetweenWheelsDiag);
         Vector blr = Vector.angleMagTranslation(227.489552922, spinWheta*distBetweenWheelsDiag);
-        Vector brr = Vector.angleMagTranslation(132.510447078, spinWheta*distBetweenWheelsDiag);
+        Vector brr = Vector.angleMagTranslation(312.510447078, spinWheta*distBetweenWheelsDiag);
 
         Vector fl = flt.add(flr);
         Vector fr = frt.add(frr);
         Vector bl = blt.add(blr);
         Vector br = brt.add(brr);
 
-        fl_turn.set(ControlMode.Position, fl.getAngleDeg());
-        fr_turn.set(ControlMode.Position, fr.getAngleDeg());
-        bl_turn.set(ControlMode.Position, bl.getAngleDeg());
-        br_turn.set(ControlMode.Position, br.getAngleDeg());
+        fl_turn.set(ControlMode.Position, cc(fl.getAngleDeg(), fl_turn.getSelectedSensorPosition()));
+        fr_turn.set(ControlMode.Position, cc(fr.getAngleDeg(), fr_turn.getSelectedSensorPosition()));
+        bl_turn.set(ControlMode.Position, cc(bl.getAngleDeg(), bl_turn.getSelectedSensorPosition()));
+        br_turn.set(ControlMode.Position, cc(br.getAngleDeg(), br_turn.getSelectedSensorPosition()));
 
         fl_drive.set(ControlMode.PercentOutput, fl.magnitude());
         fr_drive.set(ControlMode.PercentOutput, fr.magnitude());
@@ -197,7 +195,7 @@ public class UserCode{
         // GRAPHS AND PRINT OUTS ///////////////////////////////////////////////////////////
         fl_angle.putNumber("robot_angle", fl_turn.getSelectedSensorPosition(), Color.BLUE);
         ms_angle.putNumber("measured_angle", angle, Color.DARK_GRAY);
-        nw_angle.putNumber("new_angle", newAngle, Color.DARK_GRAY);
+        nw_angle.putNumber("new_angle", angle, Color.DARK_GRAY);
 
 
         br_velo.putNumber("br_velo", br_drive.getSelectedSensorVelocity(), Color.BLUE);
@@ -205,6 +203,11 @@ public class UserCode{
 
         Printouts.put("heading", gyro.getYaw());
         Printouts.put("Elapsed Time", Main.getElapsedTime());
+    }
+
+
+    static double cc(double cangle, double pangle) {
+        return normalize(cangle - pangle) + pangle;
     }
 
 

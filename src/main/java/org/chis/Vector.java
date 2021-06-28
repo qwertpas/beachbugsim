@@ -3,6 +3,8 @@ package org.chis;
 public class Vector {
     double x;
     double y;
+    double magnitude;
+
 
     public Vector(double x, double y) {
         this.x = x;
@@ -19,6 +21,11 @@ public class Vector {
         return this;
     }
 
+    public Vector setMagnitude(double m) {
+        this.magnitude = m;
+        return this;
+    }
+
     public double magnitude() {
         return Math.sqrt(x*x + y*y);
     }
@@ -29,16 +36,18 @@ public class Vector {
 
     public double getAngleDeg() {
         return Math.toDegrees(Math.atan2(y, x));
-        // tan theta = y/x
-        // theta = atan2(y/x)
     }
 
-    public static Vector angleMagTranslation(double theta, double magnitude) {
+    public static Vector angleMagTranslation(double theta_deg, double magnitude) {
         Vector n =  new Vector(0,0);
 
-        double angle = Math.toRadians(theta);
-        double x = magnitude * Math.sin(angle);
-        double y = magnitude * Math.cos(angle);
+        // if (magnitude < 0) {
+        //     theta_deg += 180;
+        // }
+
+        double theta_rad = Math.toRadians(theta_deg);
+        double x = magnitude * Math.cos(theta_rad);
+        double y = magnitude * Math.sin(theta_rad);
 
         return n.setX(x).setY(y);
 
