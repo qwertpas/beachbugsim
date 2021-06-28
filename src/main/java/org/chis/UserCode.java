@@ -3,6 +3,7 @@ package org.chis;
 import java.awt.Color;
 
 import org.chis.sim.Constants;
+import org.chis.sim.Controls;
 import org.chis.sim.GraphicDash;
 import org.chis.sim.Motor.MotorType;
 import org.chis.sim.Printouts;
@@ -144,6 +145,11 @@ public class UserCode{
 
         double x = joystick.getX();
         double y = joystick.getY();
+        double z = -joystick.getZ();
+
+        // lock rotation
+        if (Controls.buttons.get(1))
+            z = 0;
 
         // double angle = Math.toDegrees(Math.atan2(-y, x));
         double fdir = Math.toDegrees(-gyro.getYaw());
@@ -151,20 +157,22 @@ public class UserCode{
 
 
         double power = Math.sqrt(x*x + y*y);
+        // precision mode - decrease power by 0.5x
+        if (Controls.buttons.get(0)) {
+            power /= 2.0;
+            z /= 2.0;
+        }
 
-
-
-        double spinWheta = -joystick.getZ();
         
         Vector flt = Vector.angleMagTranslation(angle, power);
         Vector frt = Vector.angleMagTranslation(angle, power);
         Vector blt = Vector.angleMagTranslation(angle, power);
         Vector brt = Vector.angleMagTranslation(angle, power);
         
-        Vector flr = Vector.angleMagTranslation(132.510447078, spinWheta*distBetweenWheelsDiag);
-        Vector frr = Vector.angleMagTranslation(407.489552922, spinWheta*distBetweenWheelsDiag);
-        Vector blr = Vector.angleMagTranslation(227.489552922, spinWheta*distBetweenWheelsDiag);
-        Vector brr = Vector.angleMagTranslation(312.510447078, spinWheta*distBetweenWheelsDiag);
+        Vector flr = Vector.angleMagTranslation(132.510447078, z*distBetweenWheelsDiag);
+        Vector frr = Vector.angleMagTranslation(407.489552922, z*distBetweenWheelsDiag);
+        Vector blr = Vector.angleMagTranslation(227.489552922, z*distBetweenWheelsDiag);
+        Vector brr = Vector.angleMagTranslation(312.510447078, z*distBetweenWheelsDiag);
 
         Vector fl = flt.add(flr);
         Vector fr = frt.add(frr);
