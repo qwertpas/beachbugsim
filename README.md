@@ -1,3 +1,7 @@
+![simulation of an auto path for FRC 2021](auto_simulation.gif)
+
+
+
 # beachbugsim
 Customize positions and types of wheels on a 2d robot, then simulate code.
 - simulated encoder values
